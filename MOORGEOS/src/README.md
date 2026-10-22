@@ -8,6 +8,7 @@
 - Klicks prüfen einen rechteckigen Trefferbereich. Treffer zählen 10 Punkte und versetzen das Ziel auf eine von drei Positionen; Fehlschüsse werden gezählt.
 - Eine einfache Statusleiste zeigt Punkte und Fehlschüsse über farbige Markierungen.
 - **Neu vorbereitet:** Beim ersten Klick startet eine 60-Sekunden-Runde. Der Timer verwendet `TimerStart(TIMER_EVENT_CONTINUAL, ...)` aus dem offiziellen `timer.h`; bei null wird der Timer gestoppt und die Runde als beendet markiert; weitere Klicks sollen bis „Neues Spiel“ ignoriert werden. `Spiel > Neues Spiel` setzt Zähler und Rundenstatus zurück.
+- Während der Runde wechselt die Zielfigur im Timer-Handler alle zwei Timer-Ticks zwischen drei Positionen. Das ist eine einfache zyklische Bewegung, noch keine zufällige oder flüssige Animation.
 - Die Zeit wird in der Statusleiste vorerst als Balken dargestellt (ein Abschnitt je sechs Sekunden); eine ausgeschriebene Zahl ist noch nicht umgesetzt.
 - **Wichtig: Noch nicht kompiliert oder ausgeführt.** GOC-Syntax, Einbindung von `timer.h`, Event-Zustellung, Timer-Einheiten und Lebenszyklus müssen mit der konkreten SDK-Version geprüft werden. Dies ist ein Entwicklungsentwurf, kein getesteter Build.
 - Keine originalen Moorhuhn-Grafiken oder -Sounds enthalten.
