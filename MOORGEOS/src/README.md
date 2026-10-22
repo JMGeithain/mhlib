@@ -5,7 +5,9 @@ This directory contains the first native FreeGEOS application skeleton.
 ## Current status
 
 - Project metadata, GOC source, class header and standard `local.mk` are present.
-- The drawing method is a placeholder scene, not gameplay.
+- The app now uses a `GenViewClass` with a `VisContentClass` board, following the structure in the official TicTac sample.
+- The board draws a placeholder landscape and handles `MSG_META_START_SELECT` with a basic rectangular hit test. A hit increments an internal score and moves the target between three fixed positions; a miss increments an internal counter. The counters are not yet displayed on screen.
+- A `Spiel > Neues Spiel` trigger resets the internal prototype state.
 - The source has **not** been compiled or run yet. GOC/compiler and graphics API compatibility must be checked against the exact FreeGEOS SDK used.
 - No copyrighted original Moorhuhn images or sounds are included.
 
@@ -15,7 +17,8 @@ This directory contains the first native FreeGEOS application skeleton.
 2. Confirm that the build system recognizes the target and compiles the `.gp` and `.goc` files.
 3. Resolve any version-specific API or syntax issues based on actual compiler output.
 4. Launch in the project's supported emulator and confirm the window and placeholder scene render.
-5. Only then add mouse input and hit detection.
+5. Verify that clicks are routed to the board and that the target moves after hits.
+6. Add a visible score/miss display, then the timer and round-end state.
 
 Reference project: https://github.com/mgroeber9110/freegeos-raycast
 SDK documentation: https://bluewaysw.github.io/pcgeos/
