@@ -25,7 +25,7 @@ Die Referenz [Theaninova/mhlib](https://github.com/Theaninova/mhlib) verwendet R
 6. **Tests:** Buildschritte reproduzierbar dokumentieren und in einem FreeGEOS-Emulator prüfen.
 
 ## Aktueller Stand
-Das Verzeichnis `src/` enthält inzwischen ein natives GOC-Anwendungsgerüst mit einer einfachen Testszene (Himmel, Wiese, schematische Zielfigur) sowie `.gp`- und Build-Dateien. Das ist noch kein spielbarer Prototyp und wurde noch nicht kompiliert. Die Spielregeln und Testfälle stehen in [GAMEPLAY-SPEC.md](GAMEPLAY-SPEC.md). Die offizielle FreeGEOS-Beispielanwendung `TicTac` wurde als Referenz für die Mausereignisse untersucht; die Integration muss mit der tatsächlichen SDK-Toolchain gebaut und geprüft werden.
+Das Verzeichnis `src/` enthält inzwischen ein natives GOC-Anwendungsgerüst mit `GenViewClass`-/`VisContentClass`-Struktur, einer einfachen Testszene und einem ersten Mausklick-/Trefferentwurf. Treffer und Fehlschüsse werden bislang nur intern gezählt; eine sichtbare Punktanzeige und ein Zeitlimit fehlen noch. Das Projekt wurde nicht kompiliert. Die Spielregeln und Testfälle stehen in [GAMEPLAY-SPEC.md](GAMEPLAY-SPEC.md). Die offizielle FreeGEOS-Beispielanwendung `TicTac` dient als Referenz für die Mausereignisse.
 
 ## Referenzen
 - MHLIB: https://github.com/Theaninova/mhlib
