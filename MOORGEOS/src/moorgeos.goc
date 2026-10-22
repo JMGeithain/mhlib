@@ -1,16 +1,17 @@
 /*
- * MOORGEOS - native FreeGEOS prototype
+ * MOORGEOS - native FreeGEOS prototype.
  *
- * This is an initial source skeleton, not yet build-verified.
- * It deliberately uses simple GEOS drawing primitives and placeholder
- * target artwork. No original Moorhuhn game assets are included.
+ * Stage 2: move the scene into a GenView/VisContent tree and receive
+ * mouse-select events on the board. This source remains uncompiled until
+ * the user's FreeGEOS SDK/toolchain is available for a real build.
  */
 
 @include <stdapp.goh>
 #include <graphics.h>
-
 @include "moorgeos.goh"
 
+@class MoorGEOSProcessClass, GenProcessClass;
+@endc
 @classdecl MoorGEOSProcessClass, neverSaved;
 
 @start AppResource;
@@ -28,56 +29,124 @@
 @start Interface;
 
 @object GenPrimaryClass MoorGEOSPrimary = {
-    GI_comp = @MoorGEOSLook, @MoorGEOSNewGame;
+    GI_comp = @MoorGEOSView, @MoorGEOSGameMenu;
     HINT_SIZE_WINDOW_AS_DESIRED;
 }
 
-@object MoorGEOSLookClass MoorGEOSLook = {
-    VI_bounds = {0, 0, 320, 200};
+@object GenViewClass MoorGEOSView = {
+    GVI_content = MoorGEOSBoard;
+    GVI_docBounds = {0, 0, 320, 200};
+    GVI_color = { C_CYAN, 0, 0, 0 };
+    GVI_horizAttrs = @default | GVDA_NO_LARGER_THAN_CONTENT
+                               | GVDA_NO_SMALLER_THAN_CONTENT;
+    GVI_vertAttrs = @default | GVDA_NO_LARGER_THAN_CONTENT
+                             | GVDA_NO_SMALLER_THAN_CONTENT
+                             | GVDA_KEEP_ASPECT_RATIO;
+    ATTR_GEN_VIEW_DOES_NOT_ACCEPT_TEXT_INPUT;
+}
+
+@object GenInteractionClass MoorGEOSGameMenu = {
+    GI_visMoniker = "Spiel";
+    GI_comp = @MoorGEOSNewGame;
+    GII_visibility = GIV_POPUP;
 }
 
 @object GenTriggerClass MoorGEOSNewGame = {
-    GI_visMoniker = "Redraw";
-    GTI_actionMsg = MSG_MOORGEOS_REDRAW;
-    GTI_destination = process;
-    HINT_SEEK_MENU_BAR;
-    HINT_SEEK_SLOT = 0;
+    GI_visMoniker = "Neues Spiel";
+    GTI_destination = MoorGEOSBoard;
+    GTI_actionMsg = MSG_MOORGEOS_NEW_GAME;
 }
 
 @end Interface;
 
-/*
- * First placeholder rendering pass: a sky/ground scene and a simple
- * target silhouette. Coordinates are intentionally uncomplicated.
- */
-@method MoorGEOSLookClass, MSG_VIS_DRAW
-{
-    Rectangle bounds;
+@start BoardBlock;
 
-    @callsuper();
-    @call oself::MSG_VIS_GET_BOUNDS(&bounds);
-
-    GrSetAreaColor(gstate, CF_INDEX, C_CYAN, 0, 0);
-    GrFillRect(gstate, bounds.R_left, bounds.R_top,
-               bounds.R_right, bounds.R_top + 119);
-
-    GrSetAreaColor(gstate, CF_INDEX, C_GREEN, 0, 0);
-    GrFillRect(gstate, bounds.R_left, bounds.R_top + 120,
-               bounds.R_right, bounds.R_bottom);
-
-    /* Temporary target silhouette: body, head and two wings. */
-    GrSetAreaColor(gstate, CF_INDEX, C_BLACK, 0, 0);
-    GrFillRect(gstate, bounds.R_left + 145, bounds.R_top + 82,
-               bounds.R_left + 174, bounds.R_top + 119);
-    GrFillEllipse(gstate, bounds.R_left + 151, bounds.R_top + 63,
-                  bounds.R_left + 168, bounds.R_top + 81);
-    GrFillRect(gstate, bounds.R_left + 121, bounds.R_top + 91,
-               bounds.R_left + 145, bounds.R_top + 99);
-    GrFillRect(gstate, bounds.R_left + 174, bounds.R_top + 91,
-               bounds.R_left + 198, bounds.R_top + 99);
+@object MoorGEOSBoardClass MoorGEOSBoard = {
+    VI_bounds = {0, 0, 320, 200};
 }
 
-@method MoorGEOSProcessClass, MSG_MOORGEOS_REDRAW
+@end BoardBlock;
+
+/*
+ * Draw a simple original placeholder scene. The target is a geometric
+ * silhouette only; no original Moorhuhn art or sounds are used.
+ */
+@method MoorGEOSBoardClass, MSG_VIS_DRAW
 {
-    @send MoorGEOSLook::MSG_VIS_INVALIDATE();
+    word targetLeft;
+
+    GrSetMixMode(gstate, MM_COPY);
+
+    /* Sky and grass. */
+    GrSetAreaColor(gstate, CF_INDEX, C_CYAN, 0, 0);
+    GrFillRect(gstate, 0, 0, 319, 119);
+
+    GrSetAreaColor(gstate, CF_INDEX, C_GREEN, 0, 0);
+    GrFillRect(gstate, 0, 120, 319, 199);
+
+    /* A simple sun and two ground lines make the scene easier to read. */
+    GrSetAreaColor(gstate, CF_INDEX, C_YELLOW, 0, 0);
+    GrFillEllipse(gstate, 20, 14, 43, 37);
+
+    GrSetLineColor(gstate, CF_INDEX, C_DARK_GREEN, 0, 0);
+    GrDrawHLine(gstate, 0, 126, 319);
+    GrDrawHLine(gstate, 0, 163, 319);
+
+    /* Cycle among three predefined target positions. */
+    switch (pself->MGBI_targetPosition) {
+        case 0: targetLeft = 38; break;
+        case 1: targetLeft = 125; break;
+        default: targetLeft = 222; break;
+    }
+
+    GrSetAreaColor(gstate, CF_INDEX, C_BLACK, 0, 0);
+    GrFillRect(gstate, targetLeft + 24, 82, targetLeft + 53, 119);
+    GrFillEllipse(gstate, targetLeft + 30, 63, targetLeft + 47, 81);
+    GrFillRect(gstate, targetLeft, 91, targetLeft + 24, 99);
+    GrFillRect(gstate, targetLeft + 53, 91, targetLeft + 77, 99);
+
+    @callsuper();
+}
+
+/*
+ * The official SDK TicTac sample uses MSG_META_START_SELECT for a click
+ * and sets retVal->flags to MRF_PROCESSED. We use the same documented
+ * event shape here. The hit test is intentionally a simple rectangle for
+ * this early prototype; a precise silhouette test can come later.
+ */
+@method MoorGEOSBoardClass, MSG_META_START_SELECT
+{
+    word targetLeft;
+
+    switch (pself->MGBI_targetPosition) {
+        case 0: targetLeft = 38; break;
+        case 1: targetLeft = 125; break;
+        default: targetLeft = 222; break;
+    }
+
+    if ((xPosition >= targetLeft) &&
+        (xPosition <= targetLeft + 77) &&
+        (yPosition >= 63) &&
+        (yPosition <= 119)) {
+        pself->MGBI_score += 10;
+        pself->MGBI_targetPosition++;
+        if (pself->MGBI_targetPosition > 2) {
+            pself->MGBI_targetPosition = 0;
+        }
+    } else {
+        pself->MGBI_misses++;
+    }
+
+    @send self::MSG_VIS_INVALIDATE();
+    retVal->flags = MRF_PROCESSED;
+}
+
+/* Reset all prototype state when the user chooses Spiel > Neues Spiel. */
+@method MoorGEOSBoardClass, MSG_MOORGEOS_NEW_GAME
+{
+    pself->MGBI_score = 0;
+    pself->MGBI_misses = 0;
+    pself->MGBI_targetPosition = 0;
+
+    @send self::MSG_VIS_INVALIDATE();
 }
