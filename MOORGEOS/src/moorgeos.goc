@@ -88,7 +88,7 @@
     GrSetAreaColor(gstate, CF_INDEX, C_YELLOW, 0, 0);
     GrFillEllipse(gstate, 20, 14, 43, 37);
 
-    GrSetLineColor(gstate, CF_INDEX, C_DARK_GREEN, 0, 0);
+    GrSetLineColor(gstate, CF_INDEX, C_GREEN, 0, 0);
     GrDrawHLine(gstate, 0, 126, 319);
     GrDrawHLine(gstate, 0, 163, 319);
 
