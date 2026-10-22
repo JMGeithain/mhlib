@@ -145,12 +145,21 @@
     GrFillRect(gstate, targetLeft, 91, targetLeft + 24, 99);
     GrFillRect(gstate, targetLeft + 53, 91, targetLeft + 77, 99);
 
+    /* Context message: show the player how to start or restart. */
+    if (!pself->MGBI_gameActive && !pself->MGBI_gameFinished) {
+        GrSetAreaColor(gstate, CF_INDEX, C_BLACK, 0, 0);
+        GrFillRect(gstate, 66, 171, 254, 190);
+        GrSetTextColor(gstate, CF_INDEX, C_WHITE, 0, 0);
+        GrDrawText(gstate, 78, 178, "KLICK ZUM START", 15);
+    }
+
     /* Clear end-of-round message over the playfield when the clock expires. */
     if (pself->MGBI_gameFinished) {
         GrSetAreaColor(gstate, CF_INDEX, C_BLACK, 0, 0);
         GrFillRect(gstate, 91, 143, 229, 163);
         GrSetTextColor(gstate, CF_INDEX, C_WHITE, 0, 0);
         GrDrawText(gstate, 104, 149, "SPIEL VORBEI", 12);
+        GrDrawText(gstate, 78, 178, "NEUES SPIEL IM MENUE", 19);
     }
 
     @callsuper();
