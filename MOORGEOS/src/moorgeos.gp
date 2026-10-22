@@ -9,10 +9,11 @@ type appl, process, single
 class MoorGEOSProcessClass
 appobj MoorGEOSApp
 
-export MoorGEOSLookClass
+export MoorGEOSBoardClass
 
 library geos
 library ui
 
 resource AppResource object
 resource Interface object
+resource BoardBlock object
