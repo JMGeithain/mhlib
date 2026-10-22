@@ -10,5 +10,6 @@
     @instance word MGBI_timerHandle = 0;
     @instance byte MGBI_gameActive = 0;
     @instance byte MGBI_gameFinished = 0;
+    @instance byte MGBI_lastShotState = 0;
     @instance byte MGBI_moveCounter = 0;
 @endc
