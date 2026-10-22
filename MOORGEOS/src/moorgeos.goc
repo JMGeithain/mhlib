@@ -11,9 +11,6 @@
 
 @include "moorgeos.goh"
 
-@class MoorGEOSProcessClass, GenProcessClass;
-    @message void MSG_MOORGEOS_REDRAW();
-@endc
 @classdecl MoorGEOSProcessClass, neverSaved;
 
 @start AppResource;
