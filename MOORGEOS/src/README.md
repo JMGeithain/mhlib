@@ -5,7 +5,7 @@
 - Native FreeGEOS-GOC-Anwendungsstruktur mit `.gp`, `.goh`, `.goc` und `local.mk` vorhanden.
 - Die UI nutzt eine `GenViewClass` mit einer `VisContentClass`-Spielfläche, angelehnt an das offizielle SDK-Beispiel `Appl/SDK_C/TicTac/tictac.goc`.
 - Die Spielfläche zeichnet eine einfache Landschaft und eine schematische Zielfigur.
-- Klicks prüfen Körper, Kopfbereich und beide Flügel getrennt, statt die gesamte umschließende Rechteckfläche als Treffer zu werten. Der Kopf wird über das Begrenzungsrechteck der gezeichneten Ellipse angenähert. Treffer zählen 10 Punkte und versetzen das Ziel auf eine von drei Positionen; Fehlschüsse werden gezählt.
+- Klicks prüfen Körper, Kopfbereich und beide Flügel getrennt, statt die gesamte umschließende Rechteckfläche als Treffer zu werten. Der Kopf wird über das Begrenzungsrechteck der gezeichneten Ellipse angenähert. Treffer zählen 10 Punkte und versetzen das Ziel auf eine von drei Positionen; Fehlschüsse werden gezählt. Nach einem Schuss zeigt die Spielfläche vorübergehend den Status „TREFFER!“ oder „DANEBEN“ an.
 - Eine einfache Statusleiste zeigt Punkte und Fehlschüsse über farbige Markierungen.
 - **Neu vorbereitet:** Beim ersten Klick startet eine 60-Sekunden-Runde. Der Timer verwendet `TimerStart(TIMER_EVENT_CONTINUAL, ...)` aus dem offiziellen `timer.h`; bei null wird der Timer gestoppt und die Runde als beendet markiert; weitere Klicks sollen bis „Neues Spiel“ ignoriert werden. `Spiel > Neues Spiel` setzt Zähler und Rundenstatus zurück.
 - Während der Runde wechselt die Zielfigur im Timer-Handler alle zwei Timer-Ticks zwischen drei Positionen. Das ist eine einfache zyklische Bewegung, noch keine zufällige oder flüssige Animation.
