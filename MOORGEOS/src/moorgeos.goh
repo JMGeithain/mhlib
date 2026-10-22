@@ -1,6 +1,7 @@
-@class MoorGEOSLookClass, VisClass;
-@endc
+@class MoorGEOSBoardClass, VisContentClass;
+    @message void MSG_MOORGEOS_NEW_GAME();
 
-@class MoorGEOSProcessClass, GenProcessClass;
-    @message void MSG_MOORGEOS_REDRAW();
+    @instance word MGBI_score = 0;
+    @instance word MGBI_misses = 0;
+    @instance byte MGBI_targetPosition = 0;
 @endc
