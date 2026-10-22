@@ -1,3 +1,6 @@
 @class MoorGEOSLookClass, VisClass;
+@endc
+
+@class MoorGEOSProcessClass, GenProcessClass;
     @message void MSG_MOORGEOS_REDRAW();
 @endc
