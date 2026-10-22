@@ -8,6 +8,7 @@
 
 @include <stdapp.goh>
 #include <graphics.h>
+#include <timer.h>
 @include "moorgeos.goh"
 
 @class MoorGEOSProcessClass, GenProcessClass;
@@ -95,14 +96,16 @@
 
     /* Visible score/miss panel: each yellow square is 10 points; each red square is one miss. */
     GrSetAreaColor(gstate, CF_INDEX, C_BLACK, 0, 0);
-    GrFillRect(gstate, 4, 4, 126, 28);
+    GrFillRect(gstate, 4, 4, 126, 40);
     GrSetTextColor(gstate, CF_INDEX, C_WHITE, 0, 0);
     GrDrawText(gstate, 8, 7, "Punkte", 6);
     GrDrawText(gstate, 8, 17, "Fehl", 4);
+    GrDrawText(gstate, 8, 27, "Zeit", 4);
     {
         word i;
         word pointsShown = pself->MGBI_score / 10;
         word missesShown = pself->MGBI_misses;
+        word secondsShown = pself->MGBI_secondsLeft;
         if (pointsShown > 10) pointsShown = 10;
         if (missesShown > 10) missesShown = 10;
         GrSetAreaColor(gstate, CF_INDEX, C_YELLOW, 0, 0);
@@ -112,6 +115,10 @@
         GrSetAreaColor(gstate, CF_INDEX, C_RED, 0, 0);
         for (i = 0; i < missesShown; i++) {
             GrFillRect(gstate, 57 + (i * 6), 17, 61 + (i * 6), 21);
+        }
+        GrSetAreaColor(gstate, CF_INDEX, C_WHITE, 0, 0);
+        for (i = 0; i < secondsShown / 6; i++) {
+            GrFillRect(gstate, 57 + (i * 6), 27, 61 + (i * 6), 31);
         }
     }
 
@@ -131,15 +138,19 @@
     @callsuper();
 }
 
-/*
- * The official SDK TicTac sample uses MSG_META_START_SELECT for a click
- * and sets retVal->flags to MRF_PROCESSED. We use the same documented
- * event shape here. The hit test is intentionally a simple rectangle for
- * this early prototype; a precise silhouette test can come later.
- */
+/* Start the round clock only once the player first clicks the board. */
 @method MoorGEOSBoardClass, MSG_META_START_SELECT
 {
     word targetLeft;
+
+    if (!pself->MGBI_gameActive) {
+        pself->MGBI_gameActive = 1;
+        pself->MGBI_secondsLeft = 60;
+        pself->MGBI_timerHandle = TimerStart(
+            TIMER_EVENT_CONTINUAL, oself, 60,
+            MSG_MOORGEOS_TIMER_TICK, 60,
+            &pself->MGBI_timerID);
+    }
 
     switch (pself->MGBI_targetPosition) {
         case 0: targetLeft = 38; break;
@@ -164,12 +175,34 @@
     retVal->flags = MRF_PROCESSED;
 }
 
+/* One timer event per second; stop the round at zero. */
+@method MoorGEOSBoardClass, MSG_MOORGEOS_TIMER_TICK
+{
+    if (pself->MGBI_gameActive && pself->MGBI_secondsLeft > 0) {
+        pself->MGBI_secondsLeft--;
+        if (pself->MGBI_secondsLeft == 0) {
+            pself->MGBI_gameActive = 0;
+            TimerStop(pself->MGBI_timerHandle, pself->MGBI_timerID);
+            pself->MGBI_timerHandle = 0;
+            pself->MGBI_timerID = 0;
+        }
+        @send self::MSG_VIS_INVALIDATE();
+    }
+}
+
 /* Reset all prototype state when the user chooses Spiel > Neues Spiel. */
 @method MoorGEOSBoardClass, MSG_MOORGEOS_NEW_GAME
 {
     pself->MGBI_score = 0;
     pself->MGBI_misses = 0;
     pself->MGBI_targetPosition = 0;
+    pself->MGBI_secondsLeft = 60;
+    pself->MGBI_gameActive = 0;
+    if (pself->MGBI_timerHandle) {
+        TimerStop(pself->MGBI_timerHandle, pself->MGBI_timerID);
+        pself->MGBI_timerHandle = 0;
+        pself->MGBI_timerID = 0;
+    }
 
     @send self::MSG_VIS_INVALIDATE();
 }
