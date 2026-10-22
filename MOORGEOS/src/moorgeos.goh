@@ -1,7 +1,12 @@
 @class MoorGEOSBoardClass, VisContentClass;
     @message void MSG_MOORGEOS_NEW_GAME();
+    @message void MSG_MOORGEOS_TIMER_TICK();
 
     @instance word MGBI_score = 0;
     @instance word MGBI_misses = 0;
     @instance byte MGBI_targetPosition = 0;
+    @instance byte MGBI_secondsLeft = 60;
+    @instance word MGBI_timerID = 0;
+    @instance word MGBI_timerHandle = 0;
+    @instance byte MGBI_gameActive = 0;
 @endc
