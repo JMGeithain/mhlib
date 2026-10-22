@@ -1,0 +1,86 @@
+/*
+ * MOORGEOS - native FreeGEOS prototype
+ *
+ * This is an initial source skeleton, not yet build-verified.
+ * It deliberately uses simple GEOS drawing primitives and placeholder
+ * target artwork. No original Moorhuhn game assets are included.
+ */
+
+@include <stdapp.goh>
+#include <graphics.h>
+
+@include "moorgeos.goh"
+
+@class MoorGEOSProcessClass, GenProcessClass;
+@endc
+@classdecl MoorGEOSProcessClass, neverSaved;
+
+@start AppResource;
+
+@object GenApplicationClass MoorGEOSApp = {
+    GI_visMoniker = list { @MoorGEOSTitle };
+    GI_comp = @MoorGEOSPrimary;
+    gcnList(MANUFACTURER_ID_GEOWORKS, GAGCNLT_WINDOWS) = @MoorGEOSPrimary;
+}
+
+@visMoniker MoorGEOSTitle = "MoorGEOS";
+
+@end AppResource;
+
+@start Interface;
+
+@object GenPrimaryClass MoorGEOSPrimary = {
+    GI_comp = @MoorGEOSLook, @MoorGEOSNewGame;
+    HINT_SIZE_WINDOW_AS_DESIRED;
+}
+
+@object MoorGEOSLookClass MoorGEOSLook = {
+    VI_bounds = {0, 0, 320, 200};
+}
+
+@object GenTriggerClass MoorGEOSNewGame = {
+    GI_visMoniker = "Redraw";
+    GTI_actionMsg = MSG_MOORGEOS_REDRAW;
+    GTI_destination = process;
+    HINT_SEEK_MENU_BAR;
+    HINT_SEEK_SLOT = 0;
+}
+
+@end Interface;
+
+/*
+ * First placeholder rendering pass: a sky/ground scene and a simple
+ * target silhouette. Coordinates are intentionally uncomplicated.
+ */
+@method MoorGEOSLookClass, MSG_VIS_DRAW
+{
+    Rectangle bounds;
+
+    @call oself::MSG_VIS_GET_BOUNDS(&bounds);
+
+    GrSetAreaColor(gstate, CF_INDEX, C_CYAN, 0, 0);
+    GrFillRect(gstate, bounds.R_left, bounds.R_top,
+               bounds.R_right, bounds.R_top + 119);
+
+    GrSetAreaColor(gstate, CF_INDEX, C_GREEN, 0, 0);
+    GrFillRect(gstate, bounds.R_left, bounds.R_top + 120,
+               bounds.R_right, bounds.R_bottom);
+
+    /* Temporary target silhouette: body, head and two wings. */
+    GrSetAreaColor(gstate, CF_INDEX, C_BLACK, 0, 0);
+    GrFillRect(gstate, bounds.R_left + 145, bounds.R_top + 82,
+               bounds.R_left + 174, bounds.R_top + 119);
+    GrFillEllipse(gstate, bounds.R_left + 151, bounds.R_top + 63,
+                  bounds.R_left + 168, bounds.R_top + 81);
+    GrFillRect(gstate, bounds.R_left + 121, bounds.R_top + 91,
+               bounds.R_left + 145, bounds.R_top + 99);
+    GrFillRect(gstate, bounds.R_left + 174, bounds.R_top + 91,
+               bounds.R_left + 198, bounds.R_top + 99);
+
+    @callsuper();
+}
+
+@method MoorGEOSProcessClass, MSG_MOORGEOS_REDRAW
+{
+    @send MoorGEOSLook::MSG_VIS_INVALIDATE();
+}
