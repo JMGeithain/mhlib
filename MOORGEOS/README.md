@@ -2,7 +2,7 @@
 
 **Ein eigenständiges natives Spielprojekt für FreeGEOS, inspiriert vom klassischen Moorhuhn.**
 
-Status: Planung / technische Voruntersuchung. Noch kein lauffähiges oder kompiliertes Spiel.
+Status: Quellgerüst und erste Spielkonzeption liegen vor. Noch kein nachweislich kompiliertes oder lauffähiges Spiel.
 
 ## Ziel
 Ein kleines 2D-Zielschießspiel mit beweglichen Zielen, Maussteuerung, Treffererkennung, Zeitlimit und Punktestand für FreeGEOS. Originalgetreue Gestaltung ist erst möglich, wenn die technischen Voraussetzungen und die Nutzungsrechte an Originalressourcen geklärt sind.
@@ -25,7 +25,7 @@ Die Referenz [Theaninova/mhlib](https://github.com/Theaninova/mhlib) verwendet R
 6. **Tests:** Buildschritte reproduzierbar dokumentieren und in einem FreeGEOS-Emulator prüfen.
 
 ## Aktueller Stand
-Dieses Repository wurde als Projektgrundlage angelegt. Es enthält vorerst nur diese Planung. Die eigentliche Implementierung beginnt mit der SDK-Prüfung; ohne verifizierte Toolchain wäre GEOS-Code spekulativ.
+Das Verzeichnis `src/` enthält inzwischen ein natives GOC-Anwendungsgerüst mit einer einfachen Testszene (Himmel, Wiese, schematische Zielfigur) sowie `.gp`- und Build-Dateien. Das ist noch kein spielbarer Prototyp und wurde noch nicht kompiliert. Die Spielregeln und Testfälle stehen in [GAMEPLAY-SPEC.md](GAMEPLAY-SPEC.md). Die offizielle FreeGEOS-Beispielanwendung `TicTac` wurde als Referenz für die Mausereignisse untersucht; die Integration muss mit der tatsächlichen SDK-Toolchain gebaut und geprüft werden.
 
 ## Referenzen
 - MHLIB: https://github.com/Theaninova/mhlib
