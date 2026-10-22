@@ -185,6 +185,14 @@
 {
     if (pself->MGBI_gameActive && pself->MGBI_secondsLeft > 0) {
         pself->MGBI_secondsLeft--;
+        pself->MGBI_moveCounter++;
+        if (pself->MGBI_moveCounter >= 2 && pself->MGBI_secondsLeft > 0) {
+            pself->MGBI_moveCounter = 0;
+            pself->MGBI_targetPosition++;
+            if (pself->MGBI_targetPosition > 2) {
+                pself->MGBI_targetPosition = 0;
+            }
+        }
         if (pself->MGBI_secondsLeft == 0) {
             pself->MGBI_gameActive = 0;
             pself->MGBI_gameFinished = 1;
@@ -203,6 +211,7 @@
     pself->MGBI_misses = 0;
     pself->MGBI_targetPosition = 0;
     pself->MGBI_secondsLeft = 60;
+    pself->MGBI_moveCounter = 0;
     pself->MGBI_gameActive = 0;
     pself->MGBI_gameFinished = 0;
     if (pself->MGBI_timerHandle) {
