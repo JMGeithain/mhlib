@@ -16,8 +16,8 @@
 1. Mit der realen FreeGEOS-Toolchain kompilieren und Compilerdiagnosen korrigieren.
 2. Im Emulator prüfen, ob Ansicht und Spielfläche erscheinen.
 3. Prüfen, ob Klicks an die Spielfläche gelangen und die Trefferposition korrekt ausgewertet wird.
-4. Punktestand und Fehlschüsse sichtbar darstellen.
-5. Zeitsteuerung und Rundenende ergänzen.
+4. Sichtbare Punkt-/Fehlschussanzeige mit Compiler und Emulator prüfen.
+5. Timer-API aus `timer.h`/`timer.def` in der konkreten SDK-Version verifizieren und Rundenende ergänzen.
 6. Erst danach Animation und weitere Ziele hinzufügen.
 
 ## Referenzen
