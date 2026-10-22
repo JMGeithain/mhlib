@@ -12,6 +12,7 @@
 @include "moorgeos.goh"
 
 @class MoorGEOSProcessClass, GenProcessClass;
+    @message void MSG_MOORGEOS_REDRAW();
 @endc
 @classdecl MoorGEOSProcessClass, neverSaved;
 
@@ -56,6 +57,7 @@
 {
     Rectangle bounds;
 
+    @callsuper();
     @call oself::MSG_VIS_GET_BOUNDS(&bounds);
 
     GrSetAreaColor(gstate, CF_INDEX, C_CYAN, 0, 0);
@@ -76,8 +78,6 @@
                bounds.R_left + 145, bounds.R_top + 99);
     GrFillRect(gstate, bounds.R_left + 174, bounds.R_top + 91,
                bounds.R_left + 198, bounds.R_top + 99);
-
-    @callsuper();
 }
 
 @method MoorGEOSProcessClass, MSG_MOORGEOS_REDRAW
