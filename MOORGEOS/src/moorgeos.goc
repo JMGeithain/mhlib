@@ -151,6 +151,16 @@
         GrFillRect(gstate, 66, 171, 254, 190);
         GrSetTextColor(gstate, CF_INDEX, C_WHITE, 0, 0);
         GrDrawText(gstate, 78, 178, "KLICK ZUM START", 15);
+    } else if (pself->MGBI_gameActive && pself->MGBI_lastShotState != 0) {
+        GrSetAreaColor(gstate, CF_INDEX, C_BLACK, 0, 0);
+        GrFillRect(gstate, 108, 171, 212, 190);
+        if (pself->MGBI_lastShotState == 1) {
+            GrSetTextColor(gstate, CF_INDEX, C_YELLOW, 0, 0);
+            GrDrawText(gstate, 130, 178, "TREFFER!", 8);
+        } else {
+            GrSetTextColor(gstate, CF_INDEX, C_RED, 0, 0);
+            GrDrawText(gstate, 132, 178, "DANEBEN", 7);
+        }
     }
 
     /* Clear end-of-round message over the playfield when the clock expires. */
@@ -217,6 +227,7 @@
     }
 
     if (hitTarget) {
+        pself->MGBI_lastShotState = 1;
         /* Keep the 16-bit score from wrapping; the five-digit HUD can show it. */
         if (pself->MGBI_score <= 65520) {
             pself->MGBI_score += 10;
@@ -226,6 +237,7 @@
             pself->MGBI_targetPosition = 0;
         }
     } else {
+        pself->MGBI_lastShotState = 2;
         /* The HUD is two digits wide, so saturate the miss count at 99. */
         if (pself->MGBI_misses < 99) {
             pself->MGBI_misses++;
@@ -270,6 +282,7 @@
     pself->MGBI_moveCounter = 0;
     pself->MGBI_gameActive = 0;
     pself->MGBI_gameFinished = 0;
+    pself->MGBI_lastShotState = 0;
     if (pself->MGBI_timerHandle) {
         TimerStop(pself->MGBI_timerHandle, pself->MGBI_timerID);
         pself->MGBI_timerHandle = 0;
