@@ -143,6 +143,11 @@
 {
     word targetLeft;
 
+    if (pself->MGBI_gameFinished) {
+        retVal->flags = MRF_PROCESSED;
+        return;
+    }
+
     if (!pself->MGBI_gameActive) {
         pself->MGBI_gameActive = 1;
         pself->MGBI_secondsLeft = 60;
@@ -182,6 +187,7 @@
         pself->MGBI_secondsLeft--;
         if (pself->MGBI_secondsLeft == 0) {
             pself->MGBI_gameActive = 0;
+            pself->MGBI_gameFinished = 1;
             TimerStop(pself->MGBI_timerHandle, pself->MGBI_timerID);
             pself->MGBI_timerHandle = 0;
             pself->MGBI_timerID = 0;
@@ -198,6 +204,7 @@
     pself->MGBI_targetPosition = 0;
     pself->MGBI_secondsLeft = 60;
     pself->MGBI_gameActive = 0;
+    pself->MGBI_gameFinished = 0;
     if (pself->MGBI_timerHandle) {
         TimerStop(pself->MGBI_timerHandle, pself->MGBI_timerID);
         pself->MGBI_timerHandle = 0;
