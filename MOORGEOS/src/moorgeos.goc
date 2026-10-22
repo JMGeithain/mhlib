@@ -13,6 +13,7 @@
 @class MoorGEOSProcessClass, GenProcessClass;
 @endc
 @classdecl MoorGEOSProcessClass, neverSaved;
+@classdecl MoorGEOSBoardClass;
 
 @start AppResource;
 
