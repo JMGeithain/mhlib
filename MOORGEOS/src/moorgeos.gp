@@ -14,6 +14,6 @@ export MoorGEOSBoardClass
 library geos
 library ui
 
-resource AppResource object
-resource Interface object
+resource AppResource ui-object
+resource Interface ui-object
 resource BoardBlock object
