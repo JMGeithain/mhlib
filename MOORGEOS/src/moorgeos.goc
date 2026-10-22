@@ -160,6 +160,7 @@
 @method MoorGEOSBoardClass, MSG_META_START_SELECT
 {
     word targetLeft;
+    byte hitTarget = 0;
 
     if (pself->MGBI_gameFinished) {
         retVal->flags = MRF_PROCESSED;
@@ -181,10 +182,32 @@
         default: targetLeft = 222; break;
     }
 
+    /*
+     * Test the visible target parts instead of its entire 78x57 envelope.
+     * The head uses its ellipse's bounding rectangle as a simple approximation.
+     */
+    if ((xPosition >= targetLeft + 24) &&
+        (xPosition <= targetLeft + 53) &&
+        (yPosition >= 82) && (yPosition <= 119)) {
+        hitTarget = 1;                 /* body */
+    }
+    if ((xPosition >= targetLeft + 30) &&
+        (xPosition <= targetLeft + 47) &&
+        (yPosition >= 63) && (yPosition <= 81)) {
+        hitTarget = 1;                 /* head */
+    }
     if ((xPosition >= targetLeft) &&
+        (xPosition <= targetLeft + 24) &&
+        (yPosition >= 91) && (yPosition <= 99)) {
+        hitTarget = 1;                 /* left wing */
+    }
+    if ((xPosition >= targetLeft + 53) &&
         (xPosition <= targetLeft + 77) &&
-        (yPosition >= 63) &&
-        (yPosition <= 119)) {
+        (yPosition >= 91) && (yPosition <= 99)) {
+        hitTarget = 1;                 /* right wing */
+    }
+
+    if (hitTarget) {
         /* Keep the 16-bit score from wrapping; the five-digit HUD can show it. */
         if (pself->MGBI_score <= 65520) {
             pself->MGBI_score += 10;
