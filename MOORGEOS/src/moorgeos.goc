@@ -93,6 +93,28 @@
     GrDrawHLine(gstate, 0, 126, 319);
     GrDrawHLine(gstate, 0, 163, 319);
 
+    /* Visible score/miss panel: each yellow square is 10 points; each red square is one miss. */
+    GrSetAreaColor(gstate, CF_INDEX, C_BLACK, 0, 0);
+    GrFillRect(gstate, 4, 4, 126, 28);
+    GrSetTextColor(gstate, CF_INDEX, C_WHITE, 0, 0);
+    GrDrawText(gstate, 8, 7, "Punkte", 6);
+    GrDrawText(gstate, 8, 17, "Fehl", 4);
+    {
+        word i;
+        word pointsShown = pself->MGBI_score / 10;
+        word missesShown = pself->MGBI_misses;
+        if (pointsShown > 10) pointsShown = 10;
+        if (missesShown > 10) missesShown = 10;
+        GrSetAreaColor(gstate, CF_INDEX, C_YELLOW, 0, 0);
+        for (i = 0; i < pointsShown; i++) {
+            GrFillRect(gstate, 57 + (i * 6), 7, 61 + (i * 6), 11);
+        }
+        GrSetAreaColor(gstate, CF_INDEX, C_RED, 0, 0);
+        for (i = 0; i < missesShown; i++) {
+            GrFillRect(gstate, 57 + (i * 6), 17, 61 + (i * 6), 21);
+        }
+    }
+
     /* Cycle among three predefined target positions. */
     switch (pself->MGBI_targetPosition) {
         case 0: targetLeft = 38; break;
