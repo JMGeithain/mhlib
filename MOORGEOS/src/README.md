@@ -19,3 +19,10 @@ This directory contains the first native FreeGEOS application skeleton.
 
 Reference project: https://github.com/mgroeber9110/freegeos-raycast
 SDK documentation: https://bluewaysw.github.io/pcgeos/
+
+
+## Source review update
+
+A source-level consistency review found that `MSG_MOORGEOS_REDRAW` was initially declared under the visual object's class even though the trigger targets the process. The declaration now belongs to `MoorGEOSProcessClass` in `moorgeos.goh`; the duplicate local declaration was removed from `moorgeos.goc`.
+
+This is a source review correction only. It does not establish that the project compiles. The next validation must use the actual configured FreeGEOS/PC-GEOS SDK and record the first compiler diagnostics rather than guessing at compatibility.
