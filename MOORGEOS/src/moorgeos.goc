@@ -185,13 +185,19 @@
         (xPosition <= targetLeft + 77) &&
         (yPosition >= 63) &&
         (yPosition <= 119)) {
-        pself->MGBI_score += 10;
+        /* Keep the 16-bit score from wrapping; the five-digit HUD can show it. */
+        if (pself->MGBI_score <= 65520) {
+            pself->MGBI_score += 10;
+        }
         pself->MGBI_targetPosition++;
         if (pself->MGBI_targetPosition > 2) {
             pself->MGBI_targetPosition = 0;
         }
     } else {
-        pself->MGBI_misses++;
+        /* The HUD is two digits wide, so saturate the miss count at 99. */
+        if (pself->MGBI_misses < 99) {
+            pself->MGBI_misses++;
+        }
     }
 
     @send self::MSG_VIS_INVALIDATE();
