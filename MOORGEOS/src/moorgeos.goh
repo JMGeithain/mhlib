@@ -1,0 +1,3 @@
+@class MoorGEOSLookClass, VisClass;
+    @message void MSG_MOORGEOS_REDRAW();
+@endc
