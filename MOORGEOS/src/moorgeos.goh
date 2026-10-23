@@ -5,6 +5,12 @@
     @instance word MGBI_score = 0;
     @instance word MGBI_misses = 0;
     @instance byte MGBI_secondsLeft = 60;
+    @instance word MGBI_bird0X = 28;
+    @instance word MGBI_bird1X = 174;
+    @instance word MGBI_bird2X = 320;
+    @instance byte MGBI_bird0Right = 1;
+    @instance byte MGBI_bird1Right = 0;
+    @instance byte MGBI_bird2Right = 1;
     @instance word MGBI_timerID = 0;
     @instance word MGBI_timerHandle = 0;
     @instance byte MGBI_gameActive = 0;
