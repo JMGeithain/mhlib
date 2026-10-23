@@ -300,7 +300,7 @@
 
     /* A simple sun and two ground lines make the scene easier to read. */
     GrSetAreaColor(gstate, CF_INDEX, C_YELLOW, 0, 0);
-    GrFillEllipse(gstate, 360, 18, 387, 45);
+    GrFillEllipse(gstate, 290, 50, 317, 77);
 
     GrSetLineColor(gstate, CF_INDEX, C_GREEN, 0, 0);
     GrDrawHLine(gstate, 0, 168, 399);
@@ -441,42 +441,42 @@
 {
     if (pself->MGBI_gameActive && pself->MGBI_secondsLeft > 0) {
         if (pself->MGBI_bird0Right) {
-            pself->MGBI_bird0X += 8;
+            pself->MGBI_bird0X += 24;
             if (pself->MGBI_bird0X >= 348) {
                 pself->MGBI_bird0X = 348;
                 pself->MGBI_bird0Right = 0;
             }
-        } else if (pself->MGBI_bird0X <= 8) {
+        } else if (pself->MGBI_bird0X <= 32) {
             pself->MGBI_bird0X = 8;
             pself->MGBI_bird0Right = 1;
         } else {
-            pself->MGBI_bird0X -= 8;
+            pself->MGBI_bird0X -= 24;
         }
 
         if (pself->MGBI_bird1Right) {
-            pself->MGBI_bird1X += 6;
+            pself->MGBI_bird1X += 18;
             if (pself->MGBI_bird1X >= 348) {
                 pself->MGBI_bird1X = 348;
                 pself->MGBI_bird1Right = 0;
             }
-        } else if (pself->MGBI_bird1X <= 6) {
+        } else if (pself->MGBI_bird1X <= 24) {
             pself->MGBI_bird1X = 6;
             pself->MGBI_bird1Right = 1;
         } else {
-            pself->MGBI_bird1X -= 6;
+            pself->MGBI_bird1X -= 18;
         }
 
         if (pself->MGBI_bird2Right) {
-            pself->MGBI_bird2X += 10;
+            pself->MGBI_bird2X += 30;
             if (pself->MGBI_bird2X >= 348) {
                 pself->MGBI_bird2X = 348;
                 pself->MGBI_bird2Right = 0;
             }
-        } else if (pself->MGBI_bird2X <= 10) {
+        } else if (pself->MGBI_bird2X <= 40) {
             pself->MGBI_bird2X = 10;
             pself->MGBI_bird2Right = 1;
         } else {
-            pself->MGBI_bird2X -= 10;
+            pself->MGBI_bird2X -= 30;
         }
 
         pself->MGBI_secondsLeft--;
