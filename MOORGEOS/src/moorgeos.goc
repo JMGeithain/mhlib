@@ -2,8 +2,7 @@
  * MOORGEOS - native FreeGEOS prototype.
  *
  * Stage 2: move the scene into a GenView/VisContent tree and receive
- * mouse-select events on the board. The source has been built with the FreeGEOS SDK; see ANLEITUNG.txt for
- * local build steps and GEOS character escape values.
+ * mouse-select events on the board. Build with the FreeGEOS SDK; see ANLEITUNG.txt for local build steps.
  */
 
 @include <stdapp.goh>
@@ -45,7 +44,7 @@
 
 @object GenViewClass MoorGEOSView = {
     GVI_content = MoorGEOSBoard;
-    GVI_docBounds = {0, 0, 320, 200};
+    GVI_docBounds = {0, 0, 400, 260};
     GVI_color = { C_CYAN, 0, 0, 0 };
     GVI_horizAttrs = @default | GVDA_NO_LARGER_THAN_CONTENT
                                | GVDA_NO_SMALLER_THAN_CONTENT;
@@ -275,7 +274,7 @@
 };
 
 @object MoorGEOSBoardClass MoorGEOSBoard = {
-    VI_bounds = {0, 0, 320, 200};
+    VI_bounds = {0, 0, 400, 260};
 }
 
 @end BoardBlock;
@@ -285,7 +284,8 @@
  */
 @method MoorGEOSBoardClass, MSG_VIS_DRAW
 {
-    word targetLeft;
+    word birdX;
+    byte birdIndex;
     void *birdGraphicData;
     Handle birdGString;
 
@@ -293,18 +293,18 @@
 
     /* Sky and grass. */
     GrSetAreaColor(gstate, CF_INDEX, C_CYAN, 0, 0);
-    GrFillRect(gstate, 0, 0, 319, 119);
+    GrFillRect(gstate, 0, 0, 399, 159);
 
     GrSetAreaColor(gstate, CF_INDEX, C_GREEN, 0, 0);
-    GrFillRect(gstate, 0, 120, 319, 199);
+    GrFillRect(gstate, 0, 160, 399, 259);
 
     /* A simple sun and two ground lines make the scene easier to read. */
     GrSetAreaColor(gstate, CF_INDEX, C_YELLOW, 0, 0);
-    GrFillEllipse(gstate, 20, 14, 43, 37);
+    GrFillEllipse(gstate, 25, 18, 52, 45);
 
     GrSetLineColor(gstate, CF_INDEX, C_GREEN, 0, 0);
-    GrDrawHLine(gstate, 0, 126, 319);
-    GrDrawHLine(gstate, 0, 163, 319);
+    GrDrawHLine(gstate, 0, 168, 399);
+    GrDrawHLine(gstate, 0, 214, 399);
 
     /* Status panel with readable numeric score and remaining seconds. */
     GrSetAreaColor(gstate, CF_INDEX, C_BLACK, 0, 0);
@@ -344,44 +344,45 @@
         GrDrawText(gstate, 70, 27, digitText, 1);
     }
 
-    /* Select among three predefined target positions. */
-    switch (pself->MGBI_targetPosition) {
-        case 0: targetLeft = 38; break;
-        case 1: targetLeft = 125; break;
-        default: targetLeft = 222; break;
-    }
-
+    /* Draw three independently shootable Moorhuhner across the wider field. */
     birdGraphicData = LMemDerefHandles(OptrToHandle(oself), @MoorGEOSBirdGraphic);
     birdGString = GrLoadGString(PtrToSegment(birdGraphicData), GST_PTR,
                                   PtrToOffset(birdGraphicData));
-    GrDrawGString(gstate, birdGString, targetLeft + 13, 50, 0, (word*)0);
+    for (birdIndex = 0; birdIndex < 3; birdIndex++) {
+        switch (birdIndex) {
+            case 0: birdX = 28; break;
+            case 1: birdX = 174; break;
+            default: birdX = 320; break;
+        }
+        GrDrawGString(gstate, birdGString, birdX, 66, 0, (word*)0);
+    }
     GrDestroyGString(birdGString, 0, GSKT_LEAVE_DATA);
 
     /* Context message: show the player how to start or restart. */
     if (!pself->MGBI_gameActive && !pself->MGBI_gameFinished) {
         GrSetAreaColor(gstate, CF_INDEX, C_BLACK, 0, 0);
-        GrFillRect(gstate, 66, 171, 254, 190);
+        GrFillRect(gstate, 100, 225, 300, 245);
         GrSetTextColor(gstate, CF_INDEX, C_WHITE, 0, 0);
-        GrDrawText(gstate, 78, 178, "KLICK ZUM START", 15);
+        GrDrawText(gstate, 118, 232, "KLICK ZUM START", 15);
     } else if (pself->MGBI_gameActive && pself->MGBI_lastShotState != 0) {
         GrSetAreaColor(gstate, CF_INDEX, C_BLACK, 0, 0);
-        GrFillRect(gstate, 108, 171, 212, 190);
+        GrFillRect(gstate, 142, 225, 258, 245);
         if (pself->MGBI_lastShotState == 1) {
             GrSetTextColor(gstate, CF_INDEX, C_YELLOW, 0, 0);
-            GrDrawText(gstate, 130, 178, "TREFFER!", 8);
+            GrDrawText(gstate, 166, 232, "TREFFER!", 8);
         } else {
             GrSetTextColor(gstate, CF_INDEX, C_LIGHT_RED, 0, 0);
-            GrDrawText(gstate, 132, 178, "DANEBEN", 7);
+            GrDrawText(gstate, 168, 232, "DANEBEN", 7);
         }
     }
 
     /* Clear end-of-round message over the playfield when the clock expires. */
     if (pself->MGBI_gameFinished) {
         GrSetAreaColor(gstate, CF_INDEX, C_BLACK, 0, 0);
-        GrFillRect(gstate, 91, 143, 229, 163);
+        GrFillRect(gstate, 130, 188, 270, 212);
         GrSetTextColor(gstate, CF_INDEX, C_WHITE, 0, 0);
-        GrDrawText(gstate, 104, 149, "SPIEL VORBEI", 12);
-        GrDrawText(gstate, 78, 178, "NEUES SPIEL IM MENUE", 19);
+        GrDrawText(gstate, 144, 195, "SPIEL VORBEI", 12);
+        GrDrawText(gstate, 118, 232, "NEUES SPIEL IM MENUE", 19);
     }
 
     @callsuper();
@@ -390,7 +391,6 @@
 /* Start the round clock only once the player first clicks the board. */
 @method MoorGEOSBoardClass, MSG_META_START_SELECT
 {
-    word targetLeft;
     byte hitTarget = 0;
 
     if (pself->MGBI_gameFinished) {
@@ -407,16 +407,11 @@
             &pself->MGBI_timerID);
     }
 
-    switch (pself->MGBI_targetPosition) {
-        case 0: targetLeft = 38; break;
-        case 1: targetLeft = 125; break;
-        default: targetLeft = 222; break;
-    }
-
-    /* The sprite occupies this 52x70 rectangle. */
-    if ((xPosition >= targetLeft + 13) &&
-        (xPosition <= targetLeft + 64) &&
-        (yPosition >= 50) && (yPosition <= 119)) {
+    /* Each 52x70 sprite can be hit independently. */
+    if ((yPosition >= 66) && (yPosition <= 135) &&
+        (((xPosition >= 28) && (xPosition <= 79)) ||
+         ((xPosition >= 174) && (xPosition <= 225)) ||
+         ((xPosition >= 320) && (xPosition <= 371)))) {
         hitTarget = 1;
     }
 
@@ -425,15 +420,6 @@
         /* Keep the 16-bit score from wrapping; the five-digit HUD can show it. */
         if (pself->MGBI_score <= 65520) {
             pself->MGBI_score += 10;
-        }
-        {
-            /* LFSR selects either of the other two positions. */
-            word rng = pself->MGBI_rngState;
-            pself->MGBI_rngState = (rng >> 1) ^
-                ((0 - (rng & 1)) & 0xB400);
-            pself->MGBI_targetPosition =
-                (pself->MGBI_targetPosition + 1 +
-                 (pself->MGBI_rngState & 1)) % 3;
         }
     } else {
         pself->MGBI_lastShotState = 2;
@@ -447,24 +433,11 @@
     retVal->flags = MRF_PROCESSED;
 }
 
-/* One timer event per second; move unpredictably and stop at zero. */
+/* One timer event per second; stop the round at zero. */
 @method MoorGEOSBoardClass, MSG_MOORGEOS_TIMER_TICK
 {
     if (pself->MGBI_gameActive && pself->MGBI_secondsLeft > 0) {
         pself->MGBI_secondsLeft--;
-        pself->MGBI_moveCounter++;
-        if (pself->MGBI_moveCounter >= 2 && pself->MGBI_secondsLeft > 0) {
-            pself->MGBI_moveCounter = 0;
-            {
-            /* LFSR selects either of the other two positions. */
-            word rng = pself->MGBI_rngState;
-            pself->MGBI_rngState = (rng >> 1) ^
-                ((0 - (rng & 1)) & 0xB400);
-            pself->MGBI_targetPosition =
-                (pself->MGBI_targetPosition + 1 +
-                 (pself->MGBI_rngState & 1)) % 3;
-        }
-        }
         if (pself->MGBI_secondsLeft == 0) {
             pself->MGBI_gameActive = 0;
             pself->MGBI_gameFinished = 1;
@@ -481,13 +454,10 @@
 {
     pself->MGBI_score = 0;
     pself->MGBI_misses = 0;
-    pself->MGBI_targetPosition = 0;
     pself->MGBI_secondsLeft = 60;
-    pself->MGBI_moveCounter = 0;
     pself->MGBI_gameActive = 0;
     pself->MGBI_gameFinished = 0;
     pself->MGBI_lastShotState = 0;
-    pself->MGBI_rngState = 0xACE1;
     if (pself->MGBI_timerHandle) {
         TimerStop(pself->MGBI_timerHandle, pself->MGBI_timerID);
         pself->MGBI_timerHandle = 0;
