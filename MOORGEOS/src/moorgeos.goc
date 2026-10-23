@@ -2,8 +2,8 @@
  * MOORGEOS - native FreeGEOS prototype.
  *
  * Stage 2: move the scene into a GenView/VisContent tree and receive
- * mouse-select events on the board. This source remains uncompiled until
- * the user's FreeGEOS SDK/toolchain is available for a real build.
+ * mouse-select events on the board. The source has been built with the FreeGEOS SDK; see ANLEITUNG.txt for
+ * local build steps and GEOS character escape values.
  */
 
 @include <stdapp.goh>

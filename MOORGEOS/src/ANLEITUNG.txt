@@ -1,9 +1,9 @@
-GeoMoorhuhn lite – Version 0.1
+﻿GeoMoorhuhn lite – Version 0.1
 ================================
 
 Der Info-Dialog ist in den primären UI-Baum aufgenommen und kann über das
 Spiel-Menü geöffnet werden. Er zeigt App-Name, Version, Möllerjaner-Symbol
-und Copyright-Zeile. Die GOC-Zeichenketten verwenden Unicode-Hex-Escapes: \xFC für ü, \xF6 für ö und \xA9 für ©. Beim ü trennt \142 das folgende b vom Hex-Escape. Die Menü-Mnemonics sind S, N, I und B.
+und Copyright-Zeile. Die GOC-Zeichenketten verwenden GEOS-Zeichenwerte als Hex-Escapes: \x9F für ü, \x9A für ö und \xA9 für ©. Die Folge \x9F\142er ergibt „über“ mit genau einem b. Die Menü-Mnemonics sind S, N, I und B.
 
 Im Git-CMD-Fenster:
 
