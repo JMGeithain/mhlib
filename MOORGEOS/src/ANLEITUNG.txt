@@ -7,11 +7,11 @@ und Copyright-Zeile. Die GOC-Zeichenketten verwenden GEOS-Zeichenwerte als Hex-E
 
 Im Git-CMD-Fenster:
 
-copy /Y "C:\Users\Johannes Möller\Documents\Codex\2026-10-23\referenced-chatgpt-conversation-this-is-an\outputs\MOORGEOS-icon\moorgeos.goc" "C:\Geos\pcgeos\Local\MOORGEOS\\"
-copy /Y "C:\Users\Johannes Möller\Documents\Codex\2026-10-23\referenced-chatgpt-conversation-this-is-an\outputs\MOORGEOS-icon\moorgeos.goh" "C:\Geos\pcgeos\Local\MOORGEOS\\"
-copy /Y "C:\Users\Johannes Möller\Documents\Codex\2026-10-23\referenced-chatgpt-conversation-this-is-an\outputs\MOORGEOS-icon\moorgeos.gp" "C:\Geos\pcgeos\Local\MOORGEOS\\"
-copy /Y "C:\Users\Johannes Möller\Documents\Codex\2026-10-23\referenced-chatgpt-conversation-this-is-an\outputs\MOORGEOS-icon\moorgeosicons.goh" "C:\Geos\pcgeos\Local\MOORGEOS\\"
-copy /Y "C:\Users\Johannes Möller\Documents\Codex\2026-10-23\referenced-chatgpt-conversation-this-is-an\outputs\MOORGEOS-icon\moorgeosaboutlogo.goh" "C:\Geos\pcgeos\Local\MOORGEOS\\"
+copy /Y "C:\Users\Johannes Möller\Documents\Codex\2026-10-23\referenced-chatgpt-conversation-this-is-an\outputs\MOORGEOS-icon\moorgeos.goc" "C:\Geos\pcgeos\Local\MOORGEOS\"
+copy /Y "C:\Users\Johannes Möller\Documents\Codex\2026-10-23\referenced-chatgpt-conversation-this-is-an\outputs\MOORGEOS-icon\moorgeos.goh" "C:\Geos\pcgeos\Local\MOORGEOS\"
+copy /Y "C:\Users\Johannes Möller\Documents\Codex\2026-10-23\referenced-chatgpt-conversation-this-is-an\outputs\MOORGEOS-icon\moorgeos.gp" "C:\Geos\pcgeos\Local\MOORGEOS\"
+copy /Y "C:\Users\Johannes Möller\Documents\Codex\2026-10-23\referenced-chatgpt-conversation-this-is-an\outputs\MOORGEOS-icon\moorgeosicons.goh" "C:\Geos\pcgeos\Local\MOORGEOS\"
+copy /Y "C:\Users\Johannes Möller\Documents\Codex\2026-10-23\referenced-chatgpt-conversation-this-is-an\outputs\MOORGEOS-icon\moorgeosaboutlogo.goh" "C:\Geos\pcgeos\Local\MOORGEOS\"
 cd /d C:\Geos\pcgeos\Local\MOORGEOS
 del moorgeos.eobj
 pmake
