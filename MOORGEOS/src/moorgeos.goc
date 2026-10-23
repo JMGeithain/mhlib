@@ -300,7 +300,7 @@
 
     /* A simple sun and two ground lines make the scene easier to read. */
     GrSetAreaColor(gstate, CF_INDEX, C_YELLOW, 0, 0);
-    GrFillEllipse(gstate, 25, 18, 52, 45);
+    GrFillEllipse(gstate, 360, 18, 387, 45);
 
     GrSetLineColor(gstate, CF_INDEX, C_GREEN, 0, 0);
     GrDrawHLine(gstate, 0, 168, 399);
@@ -347,9 +347,9 @@
     /* Load, draw, and release a fresh GString for each chicken. */
     for (birdIndex = 0; birdIndex < 3; birdIndex++) {
         switch (birdIndex) {
-            case 0: birdX = 28; break;
-            case 1: birdX = 174; break;
-            default: birdX = 320; break;
+            case 0: birdX = pself->MGBI_bird0X; break;
+            case 1: birdX = pself->MGBI_bird1X; break;
+            default: birdX = pself->MGBI_bird2X; break;
         }
         birdGraphicData = LMemDerefHandles(OptrToHandle(oself), @MoorGEOSBirdGraphic);
         birdGString = GrLoadGString(PtrToSegment(birdGraphicData), GST_PTR,
@@ -407,11 +407,14 @@
             &pself->MGBI_timerID);
     }
 
-    /* Each 52x70 sprite can be hit independently. */
+    /* Check the current position of each 52x70 sprite. */
     if ((yPosition >= 66) && (yPosition <= 135) &&
-        (((xPosition >= 28) && (xPosition <= 79)) ||
-         ((xPosition >= 174) && (xPosition <= 225)) ||
-         ((xPosition >= 320) && (xPosition <= 371)))) {
+        (((xPosition >= pself->MGBI_bird0X) &&
+          (xPosition <= pself->MGBI_bird0X + 51)) ||
+         ((xPosition >= pself->MGBI_bird1X) &&
+          (xPosition <= pself->MGBI_bird1X + 51)) ||
+         ((xPosition >= pself->MGBI_bird2X) &&
+          (xPosition <= pself->MGBI_bird2X + 51)))) {
         hitTarget = 1;
     }
 
@@ -433,10 +436,49 @@
     retVal->flags = MRF_PROCESSED;
 }
 
-/* One timer event per second; stop the round at zero. */
+/* Move each chicken across the field once per second, then update the clock. */
 @method MoorGEOSBoardClass, MSG_MOORGEOS_TIMER_TICK
 {
     if (pself->MGBI_gameActive && pself->MGBI_secondsLeft > 0) {
+        if (pself->MGBI_bird0Right) {
+            pself->MGBI_bird0X += 8;
+            if (pself->MGBI_bird0X >= 348) {
+                pself->MGBI_bird0X = 348;
+                pself->MGBI_bird0Right = 0;
+            }
+        } else if (pself->MGBI_bird0X <= 8) {
+            pself->MGBI_bird0X = 8;
+            pself->MGBI_bird0Right = 1;
+        } else {
+            pself->MGBI_bird0X -= 8;
+        }
+
+        if (pself->MGBI_bird1Right) {
+            pself->MGBI_bird1X += 6;
+            if (pself->MGBI_bird1X >= 348) {
+                pself->MGBI_bird1X = 348;
+                pself->MGBI_bird1Right = 0;
+            }
+        } else if (pself->MGBI_bird1X <= 6) {
+            pself->MGBI_bird1X = 6;
+            pself->MGBI_bird1Right = 1;
+        } else {
+            pself->MGBI_bird1X -= 6;
+        }
+
+        if (pself->MGBI_bird2Right) {
+            pself->MGBI_bird2X += 10;
+            if (pself->MGBI_bird2X >= 348) {
+                pself->MGBI_bird2X = 348;
+                pself->MGBI_bird2Right = 0;
+            }
+        } else if (pself->MGBI_bird2X <= 10) {
+            pself->MGBI_bird2X = 10;
+            pself->MGBI_bird2Right = 1;
+        } else {
+            pself->MGBI_bird2X -= 10;
+        }
+
         pself->MGBI_secondsLeft--;
         if (pself->MGBI_secondsLeft == 0) {
             pself->MGBI_gameActive = 0;
@@ -455,6 +497,12 @@
     pself->MGBI_score = 0;
     pself->MGBI_misses = 0;
     pself->MGBI_secondsLeft = 60;
+    pself->MGBI_bird0X = 28;
+    pself->MGBI_bird1X = 174;
+    pself->MGBI_bird2X = 320;
+    pself->MGBI_bird0Right = 1;
+    pself->MGBI_bird1Right = 0;
+    pself->MGBI_bird2Right = 1;
     pself->MGBI_gameActive = 0;
     pself->MGBI_gameFinished = 0;
     pself->MGBI_lastShotState = 0;
