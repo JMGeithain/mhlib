@@ -344,20 +344,19 @@
         GrDrawText(gstate, 70, 27, digitText, 1);
     }
 
-    /* Draw three independently shootable Moorhuhner across the wider field. */
-    birdGraphicData = LMemDerefHandles(OptrToHandle(oself), @MoorGEOSBirdGraphic);
-    birdGString = GrLoadGString(PtrToSegment(birdGraphicData), GST_PTR,
-                                  PtrToOffset(birdGraphicData));
+    /* Load, draw, and release a fresh GString for each chicken. */
     for (birdIndex = 0; birdIndex < 3; birdIndex++) {
         switch (birdIndex) {
             case 0: birdX = 28; break;
             case 1: birdX = 174; break;
             default: birdX = 320; break;
         }
-        GrSetGStringPos(gstate, GSSPT_BEGINNING, 0);
+        birdGraphicData = LMemDerefHandles(OptrToHandle(oself), @MoorGEOSBirdGraphic);
+        birdGString = GrLoadGString(PtrToSegment(birdGraphicData), GST_PTR,
+                                      PtrToOffset(birdGraphicData));
         GrDrawGString(gstate, birdGString, birdX, 66, 0, (word*)0);
+        GrDestroyGString(birdGString, 0, GSKT_LEAVE_DATA);
     }
-    GrDestroyGString(birdGString, 0, GSKT_LEAVE_DATA);
 
     /* Context message: show the player how to start or restart. */
     if (!pself->MGBI_gameActive && !pself->MGBI_gameFinished) {
