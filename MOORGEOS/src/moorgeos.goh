@@ -12,4 +12,5 @@
     @instance byte MGBI_gameFinished = 0;
     @instance byte MGBI_lastShotState = 0;
     @instance byte MGBI_moveCounter = 0;
+    @instance word MGBI_rngState = 0xACE1;
 @endc

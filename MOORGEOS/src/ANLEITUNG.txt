@@ -1,0 +1,18 @@
+GeoMoorhuhn lite – Version 0.1
+================================
+
+Der Info-Dialog ist in den primären UI-Baum aufgenommen und kann über das
+Spiel-Menü geöffnet werden. Er zeigt App-Name, Version, Möllerjaner-Symbol
+und Copyright-Zeile. Die GOC-Zeichenketten verwenden Unicode-Hex-Escapes: \xFC für ü, \xF6 für ö und \xA9 für ©. Beim ü trennt \142 das folgende b vom Hex-Escape. Die Menü-Mnemonics sind S, N, I und B.
+
+Im Git-CMD-Fenster:
+
+copy /Y "C:\Users\Johannes Möller\Documents\Codex\2026-10-23\referenced-chatgpt-conversation-this-is-an\outputs\MOORGEOS-icon\moorgeos.goc" "C:\Geos\pcgeos\Local\MOORGEOS\"
+copy /Y "C:\Users\Johannes Möller\Documents\Codex\2026-10-23\referenced-chatgpt-conversation-this-is-an\outputs\MOORGEOS-icon\moorgeos.gp" "C:\Geos\pcgeos\Local\MOORGEOS\"
+copy /Y "C:\Users\Johannes Möller\Documents\Codex\2026-10-23\referenced-chatgpt-conversation-this-is-an\outputs\MOORGEOS-icon\moorgeosaboutlogo.goh" "C:\Geos\pcgeos\Local\MOORGEOS\"
+cd /d C:\Geos\pcgeos\Local\MOORGEOS
+del moorgeos.eobj
+pmake
+
+Das Löschen von moorgeos.eobj erzwingt die erneute Übersetzung des Quelltexts.
+Der Build wurde hier nicht ausgeführt.
