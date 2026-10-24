@@ -133,7 +133,7 @@
 
 @visMoniker MoorGEOSIconSmall = { /* 230 bytes */
 	size = standard;
-	style = icon;
+	style = tool;
 	color = color8;
 	aspectRatio = normal;
 	cachedSize = 15, 15;
