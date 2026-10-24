@@ -285,6 +285,7 @@
 @method MoorGEOSBoardClass, MSG_VIS_DRAW
 {
     word birdX;
+    word birdY;
     byte birdIndex;
     void *birdGraphicData;
     Handle birdGString;
@@ -347,14 +348,14 @@
     /* Load, draw, and release a fresh GString for each chicken. */
     for (birdIndex = 0; birdIndex < 3; birdIndex++) {
         switch (birdIndex) {
-            case 0: birdX = pself->MGBI_bird0X; break;
-            case 1: birdX = pself->MGBI_bird1X; break;
-            default: birdX = pself->MGBI_bird2X; break;
+            case 0: birdX = pself->MGBI_bird0X; birdY = pself->MGBI_bird0Y; break;
+            case 1: birdX = pself->MGBI_bird1X; birdY = pself->MGBI_bird1Y; break;
+            default: birdX = pself->MGBI_bird2X; birdY = pself->MGBI_bird2Y; break;
         }
         birdGraphicData = LMemDerefHandles(OptrToHandle(oself), @MoorGEOSBirdGraphic);
         birdGString = GrLoadGString(PtrToSegment(birdGraphicData), GST_PTR,
                                       PtrToOffset(birdGraphicData));
-        GrDrawGString(gstate, birdGString, birdX, 66, 0, (word*)0);
+        GrDrawGString(gstate, birdGString, birdX, birdY, 0, (word*)0);
         GrDestroyGString(birdGString, 0, GSKT_LEAVE_DATA);
     }
 
@@ -407,14 +408,19 @@
             &pself->MGBI_timerID);
     }
 
-    /* Check the current position of each 52x70 sprite. */
-    if ((yPosition >= 66) && (yPosition <= 135) &&
-        (((xPosition >= pself->MGBI_bird0X) &&
-          (xPosition <= pself->MGBI_bird0X + 51)) ||
-         ((xPosition >= pself->MGBI_bird1X) &&
-          (xPosition <= pself->MGBI_bird1X + 51)) ||
-         ((xPosition >= pself->MGBI_bird2X) &&
-          (xPosition <= pself->MGBI_bird2X + 51)))) {
+    /* Check the current 52x70 rectangle of each moving sprite. */
+    if (((xPosition >= pself->MGBI_bird0X) &&
+         (xPosition <= pself->MGBI_bird0X + 51) &&
+         (yPosition >= pself->MGBI_bird0Y) &&
+         (yPosition <= pself->MGBI_bird0Y + 69)) ||
+        ((xPosition >= pself->MGBI_bird1X) &&
+         (xPosition <= pself->MGBI_bird1X + 51) &&
+         (yPosition >= pself->MGBI_bird1Y) &&
+         (yPosition <= pself->MGBI_bird1Y + 69)) ||
+        ((xPosition >= pself->MGBI_bird2X) &&
+         (xPosition <= pself->MGBI_bird2X + 51) &&
+         (yPosition >= pself->MGBI_bird2Y) &&
+         (yPosition <= pself->MGBI_bird2Y + 69))) {
         hitTarget = 1;
     }
 
@@ -441,42 +447,84 @@
 {
     if (pself->MGBI_gameActive && pself->MGBI_secondsLeft > 0) {
         if (pself->MGBI_bird0Right) {
-            pself->MGBI_bird0X += 24;
-            if (pself->MGBI_bird0X >= 348) {
+            if (pself->MGBI_bird0X >= 312) {
                 pself->MGBI_bird0X = 348;
                 pself->MGBI_bird0Right = 0;
+            } else {
+                pself->MGBI_bird0X += 36;
             }
-        } else if (pself->MGBI_bird0X <= 32) {
+        } else if (pself->MGBI_bird0X <= 44) {
             pself->MGBI_bird0X = 8;
             pself->MGBI_bird0Right = 1;
         } else {
-            pself->MGBI_bird0X -= 24;
+            pself->MGBI_bird0X -= 36;
+        }
+        if (pself->MGBI_bird0Down) {
+            if (pself->MGBI_bird0Y >= 80) {
+                pself->MGBI_bird0Y = 88;
+                pself->MGBI_bird0Down = 0;
+            } else {
+                pself->MGBI_bird0Y += 8;
+            }
+        } else if (pself->MGBI_bird0Y <= 56) {
+            pself->MGBI_bird0Y = 48;
+            pself->MGBI_bird0Down = 1;
+        } else {
+            pself->MGBI_bird0Y -= 8;
         }
 
         if (pself->MGBI_bird1Right) {
-            pself->MGBI_bird1X += 18;
-            if (pself->MGBI_bird1X >= 348) {
+            if (pself->MGBI_bird1X >= 318) {
                 pself->MGBI_bird1X = 348;
                 pself->MGBI_bird1Right = 0;
+            } else {
+                pself->MGBI_bird1X += 30;
             }
-        } else if (pself->MGBI_bird1X <= 24) {
+        } else if (pself->MGBI_bird1X <= 36) {
             pself->MGBI_bird1X = 6;
             pself->MGBI_bird1Right = 1;
         } else {
-            pself->MGBI_bird1X -= 18;
+            pself->MGBI_bird1X -= 30;
+        }
+        if (pself->MGBI_bird1Down) {
+            if (pself->MGBI_bird1Y >= 78) {
+                pself->MGBI_bird1Y = 88;
+                pself->MGBI_bird1Down = 0;
+            } else {
+                pself->MGBI_bird1Y += 10;
+            }
+        } else if (pself->MGBI_bird1Y <= 58) {
+            pself->MGBI_bird1Y = 48;
+            pself->MGBI_bird1Down = 1;
+        } else {
+            pself->MGBI_bird1Y -= 10;
         }
 
         if (pself->MGBI_bird2Right) {
-            pself->MGBI_bird2X += 30;
-            if (pself->MGBI_bird2X >= 348) {
+            if (pself->MGBI_bird2X >= 306) {
                 pself->MGBI_bird2X = 348;
                 pself->MGBI_bird2Right = 0;
+            } else {
+                pself->MGBI_bird2X += 42;
             }
-        } else if (pself->MGBI_bird2X <= 40) {
+        } else if (pself->MGBI_bird2X <= 52) {
             pself->MGBI_bird2X = 10;
             pself->MGBI_bird2Right = 1;
         } else {
-            pself->MGBI_bird2X -= 30;
+            pself->MGBI_bird2X -= 42;
+        }
+        if (pself->MGBI_bird2Down) {
+            if (pself->MGBI_bird2Y >= 82) {
+                pself->MGBI_bird2Y = 88;
+                pself->MGBI_bird2Down = 0;
+            } else {
+                pself->MGBI_bird2Y += 6;
+            }
+        } else if (pself->MGBI_bird2Y <= 54) {
+            pself->MGBI_bird2Y = 48;
+            pself->MGBI_bird2Down = 1;
+        } else {
+            pself->MGBI_bird2Y -= 6;
         }
 
         pself->MGBI_secondsLeft--;
@@ -500,9 +548,15 @@
     pself->MGBI_bird0X = 28;
     pself->MGBI_bird1X = 174;
     pself->MGBI_bird2X = 320;
+    pself->MGBI_bird0Y = 66;
+    pself->MGBI_bird1Y = 82;
+    pself->MGBI_bird2Y = 56;
     pself->MGBI_bird0Right = 1;
     pself->MGBI_bird1Right = 0;
     pself->MGBI_bird2Right = 1;
+    pself->MGBI_bird0Down = 1;
+    pself->MGBI_bird1Down = 0;
+    pself->MGBI_bird2Down = 1;
     pself->MGBI_gameActive = 0;
     pself->MGBI_gameFinished = 0;
     pself->MGBI_lastShotState = 0;
