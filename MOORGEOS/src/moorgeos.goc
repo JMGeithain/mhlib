@@ -19,7 +19,12 @@
 @start AppResource;
 
 @object GenApplicationClass MoorGEOSApp = {
-    GI_visMoniker = list { @MoorGEOSIconLarge, @MoorGEOSIconSmall, @MoorGEOSTitle };
+    /* The UI chooses a suitable moniker from this list for its display. */
+    GI_visMoniker = list {
+        @MoorGEOSTitle,
+        @MoorGEOSIconLarge,
+        @MoorGEOSIconSmall
+    };
     GI_comp = @MoorGEOSPrimary;
     gcnList(MANUFACTURER_ID_GEOWORKS, GAGCNLT_WINDOWS) = @MoorGEOSPrimary;
 }
@@ -37,7 +42,7 @@
 
 @object GenPrimaryClass MoorGEOSPrimary = {
     GI_comp = @MoorGEOSView, @MoorGEOSGameMenu, @MoorGEOSAboutDialog;
-    GI_visMoniker = list { @MoorGEOSIconSmall, @MoorGEOSTitle };
+    GI_visMoniker = list { @MoorGEOSTitle, @MoorGEOSIconSmall };
     HINT_SIZE_WINDOW_AS_DESIRED;
     HINT_PRIMARY_NO_FILE_MENU;
 }
