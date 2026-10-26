@@ -92,7 +92,7 @@
     GI_visMoniker = "GeoMoorhuhn lite";
 }
 @object GenGlyphClass MoorGEOSAboutLine2 = {
-    GI_visMoniker = "Version 0.1";
+    GI_visMoniker = "Version 0.2";
 }
 @object GenGlyphClass MoorGEOSAboutLogoGlyph = {
     GI_visMoniker = list { @MoorGEOSAboutLogo };
@@ -465,17 +465,17 @@
             pself->MGBI_bird0X -= 36;
         }
         if (pself->MGBI_bird0Down) {
-            if (pself->MGBI_bird0Y >= 80) {
-                pself->MGBI_bird0Y = 88;
+            if (pself->MGBI_bird0Y >= 94) {
+                pself->MGBI_bird0Y = 108;
                 pself->MGBI_bird0Down = 0;
             } else {
-                pself->MGBI_bird0Y += 8;
+                pself->MGBI_bird0Y += 14;
             }
-        } else if (pself->MGBI_bird0Y <= 56) {
-            pself->MGBI_bird0Y = 48;
+        } else if (pself->MGBI_bird0Y <= 42) {
+            pself->MGBI_bird0Y = 32;
             pself->MGBI_bird0Down = 1;
         } else {
-            pself->MGBI_bird0Y -= 8;
+            pself->MGBI_bird0Y -= 14;
         }
 
         if (pself->MGBI_bird1Right) {
@@ -492,17 +492,17 @@
             pself->MGBI_bird1X -= 30;
         }
         if (pself->MGBI_bird1Down) {
-            if (pself->MGBI_bird1Y >= 78) {
-                pself->MGBI_bird1Y = 88;
+            if (pself->MGBI_bird1Y >= 92) {
+                pself->MGBI_bird1Y = 108;
                 pself->MGBI_bird1Down = 0;
             } else {
-                pself->MGBI_bird1Y += 10;
+                pself->MGBI_bird1Y += 16;
             }
-        } else if (pself->MGBI_bird1Y <= 58) {
-            pself->MGBI_bird1Y = 48;
+        } else if (pself->MGBI_bird1Y <= 48) {
+            pself->MGBI_bird1Y = 32;
             pself->MGBI_bird1Down = 1;
         } else {
-            pself->MGBI_bird1Y -= 10;
+            pself->MGBI_bird1Y -= 16;
         }
 
         if (pself->MGBI_bird2Right) {
@@ -519,17 +519,17 @@
             pself->MGBI_bird2X -= 42;
         }
         if (pself->MGBI_bird2Down) {
-            if (pself->MGBI_bird2Y >= 82) {
-                pself->MGBI_bird2Y = 88;
+            if (pself->MGBI_bird2Y >= 96) {
+                pself->MGBI_bird2Y = 108;
                 pself->MGBI_bird2Down = 0;
             } else {
-                pself->MGBI_bird2Y += 6;
+                pself->MGBI_bird2Y += 12;
             }
-        } else if (pself->MGBI_bird2Y <= 54) {
-            pself->MGBI_bird2Y = 48;
+        } else if (pself->MGBI_bird2Y <= 44) {
+            pself->MGBI_bird2Y = 32;
             pself->MGBI_bird2Down = 1;
         } else {
-            pself->MGBI_bird2Y -= 6;
+            pself->MGBI_bird2Y -= 12;
         }
 
         pself->MGBI_secondsLeft--;
