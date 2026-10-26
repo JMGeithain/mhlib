@@ -312,13 +312,13 @@
     GrDrawHLine(gstate, 0, 168, 399);
     GrDrawHLine(gstate, 0, 214, 399);
 
-    /* Status panel with readable numeric score and remaining seconds. */
+    /* Give the three HUD rows clear spacing and padding on every side. */
     GrSetAreaColor(gstate, CF_INDEX, C_BLACK, 0, 0);
-    GrFillRect(gstate, 4, 4, 126, 40);
+    GrFillRect(gstate, 4, 4, 132, 55);
     GrSetTextColor(gstate, CF_INDEX, C_WHITE, 0, 0);
-    GrDrawText(gstate, 8, 7, "Punkte", 6);
-    GrDrawText(gstate, 8, 17, "Fehler", 6);
-    GrDrawText(gstate, 8, 27, "Zeit", 4);
+    GrDrawText(gstate, 10, 10, "Punkte", 6);
+    GrDrawText(gstate, 10, 26, "Fehler", 6);
+    GrDrawText(gstate, 10, 42, "Zeit", 4);
     {
         word i;
         word scoreValue = pself->MGBI_score;
@@ -333,21 +333,21 @@
             for (j = i + 1; j < 5; j++) divisor *= 10;
             digitText[0] = '0' + ((scoreValue / divisor) % 10);
             digitText[1] = 0;
-            GrDrawText(gstate, 62 + (i * 8), 7, digitText, 1);
+            GrDrawText(gstate, 76 + (i * 8), 10, digitText, 1);
         }
         /* Miss count is capped visually at 99 to keep the panel compact. */
         if (missesValue > 99) missesValue = 99;
         GrSetTextColor(gstate, CF_INDEX, C_LIGHT_RED, 0, 0);
         digitText[0] = '0' + ((missesValue / 10) % 10);
         digitText[1] = 0;
-        GrDrawText(gstate, 62, 17, digitText, 1);
+        GrDrawText(gstate, 76, 26, digitText, 1);
         digitText[0] = '0' + (missesValue % 10);
-        GrDrawText(gstate, 70, 17, digitText, 1);
+        GrDrawText(gstate, 84, 26, digitText, 1);
         GrSetTextColor(gstate, CF_INDEX, C_WHITE, 0, 0);
         digitText[0] = '0' + ((secondsValue / 10) % 10);
-        GrDrawText(gstate, 62, 27, digitText, 1);
+        GrDrawText(gstate, 76, 42, digitText, 1);
         digitText[0] = '0' + (secondsValue % 10);
-        GrDrawText(gstate, 70, 27, digitText, 1);
+        GrDrawText(gstate, 84, 42, digitText, 1);
     }
 
     /* Load, draw, and release a fresh GString for each chicken. */
