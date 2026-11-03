@@ -1,9 +1,9 @@
 name moorgeos.app
 
-longname "MoorGEOS"
+longname "GeoMoorhuhn lite"
 
-tokenchars "MGRS"
-tokenid 16425
+tokenchars "MHun"
+tokenid 16506
 
 type appl, process, single
 class MoorGEOSProcessClass
@@ -15,5 +15,6 @@ library geos
 library ui
 
 resource AppResource ui-object
+resource AppMonikerResource lmem, read-only, shared
 resource Interface ui-object
 resource BoardBlock object
