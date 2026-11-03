@@ -10,6 +10,7 @@
 #include <graphics.h>
 #include <gstring.h>
 #include <timer.h>
+#include <sound.h>
 @include "moorgeos.goh"
 
 @class MoorGEOSProcessClass, GenProcessClass;
@@ -508,6 +509,9 @@
 @method MoorGEOSBoardClass, MSG_META_START_SELECT
 {
     byte hitTarget = 0;
+
+    /* Play a short shot tone for every accepted left-click. */
+    UserStandardSound(SST_CUSTOM_NOTE, HIGH_E, 20);
 
     if (pself->MGBI_gameFinished) {
         retVal->flags = MRF_PROCESSED;
