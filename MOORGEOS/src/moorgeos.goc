@@ -1,5 +1,5 @@
 /*
- * GeoMoorhuhn lite v0.4
+ * GeoMoorhuhn lite v0.5
  * Native GOC game for PC/GEOS 2.x and higher,
  * including FreeGEOS.
  * Tested build: 3 November 2026.
@@ -93,7 +93,7 @@
     GI_visMoniker = "GeoMoorhuhn lite";
 }
 @object GenGlyphClass MoorGEOSAboutLine2 = {
-    GI_visMoniker = "Version 0.4";
+    GI_visMoniker = "Version 0.5";
 }
 @object GenGlyphClass MoorGEOSAboutLogoGlyph = {
     GI_visMoniker = list { @MoorGEOSAboutLogo };
