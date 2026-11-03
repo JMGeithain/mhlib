@@ -2,11 +2,13 @@
 
 Eigenständiges natives GOC-Spielprojekt für **PC/GEOS 2.x und höher bis FreeGEOS**.
 
-**Aktueller Stand:** Version 0.4 – am 3. November 2026 vom Anwender kompiliert und im Emulator getestet.
+**Letzter bestätigter Release-Stand:** Version 0.4. Version 0.5 befindet sich in Entwicklung.
 
 > Dieses Projekt ist nicht für GeoWorks 1.x / PC/GEOS 1.x bestimmt.
 
 ## Version 0.4 – bestätigter Funktionsstand
+
+Die nachfolgenden v0.5-Erweiterungen sind noch in Entwicklung und noch nicht im Emulator bestätigt.
 
 - Spielfläche mit Himmel, Boden und Sonne.
 - Drei Moorhuhn-Sprites als 52 × 70 Pixel große, unkomprimierte 4-bpp-Bitmaps mit 1-bpp-Maske.
@@ -18,6 +20,11 @@ Eigenständiges natives GOC-Spielprojekt für **PC/GEOS 2.x und höher bis FreeG
 - JM-Logo im Info-Dialog mit transparenter 1-bpp-Maske.
 - Vergrößerte schwarze Text-Hintergründe für bessere Abstände.
 - Flackerfreie Darstellung im bestätigten Spieltest.
+
+## Geplante/aktuelle v0.5-Erweiterung
+
+- Versionsanzeige im Infofenster auf `Version 0.5` geändert.
+- Kurzer Schusston beim linken Mausklick ergänzt. Der erste Implementierungsstand verwendet `UserStandardSound(SST_CUSTOM_NOTE, HIGH_E, 20)` aus der PC/GEOS-Sound-API. Der Ton ist ein kurzer Systemton, noch kein speziell gesampelter Schussklang; die Wiedergabe muss im Emulator geprüft werden.
 
 ## Build- und Teststatus
 
