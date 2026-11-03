@@ -2,7 +2,7 @@
  * GeoMoorhuhn lite v0.5
  * Native GOC game for PC/GEOS 2.x and higher,
  * including FreeGEOS.
- * v0.4 baseline tested 3 November 2026; v0.5 sound change pending test.
+ * v0.4 baseline tested 3 November 2026; v0.5 gunshot sound tested in emulator.
  */
 
 @include <stdapp.goh>
