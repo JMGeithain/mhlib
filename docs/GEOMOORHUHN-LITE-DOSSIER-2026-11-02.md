@@ -1,121 +1,163 @@
 # GeoMoorhuhn lite – Entwicklungsdossier
-## Nachtrag: Fadenkreuz-Mauszeiger und Laufzeittest
-**Stand:** 2. November 2026  
+## Nachtrag: Version 0.4 – Bitmapmasken, flackerfreie Darstellung und HUD-Abstände
+**Stand:** 3. November 2026  
 **Projektbereich:** PC/GEOS 1.x / GeoWorks 1.x  
-**Projektversion laut Programmfenster:** 0.3
+**Projektversion laut Programmfenster:** 0.4  
+**Maßgebliches Repository:** `JMGeithain/mhlib`  
+**Dokumentationsbranch:** `geomoorhuhn-lite-v0.1`
 
-> Dieser Nachtrag dokumentiert den aktuellen, vom Anwender getesteten Stand. Er trennt ausdrücklich zwischen erfolgreich kompilierten Artefakten, beobachtetem Laufzeitverhalten und noch offenen Arbeiten.
+> Dieser Nachtrag ergänzt den vorherigen Stand vom 2. November 2026. Er unterscheidet zwischen den vom Anwender bestätigten Laufzeitergebnissen und den technischen Änderungen am Quelltext.
 
-## 1. Ergebnis des Fadenkreuz-Updates
+## 1. Zusammenfassung des getesteten Ergebnisses
 
-Das Spiel zeigt während einer aktiven Runde einen eigenen Fadenkreuz-Mauszeiger. Der Anwender hat die neue Version in GeoWorks/PC/GEOS gestartet und mit zwei Bildschirmaufnahmen bestätigt:
+Der Anwender hat die Version 0.4 in GeoWorks/PC/GEOS gestartet und mit Bildschirmaufnahmen vom 3. November 2026 bestätigt:
 
-- Vor Spielbeginn erscheint der normale Mauszeiger; die Spielfläche zeigt „KLICK ZUM START“.
-- Nach dem Start der Runde ist das Fadenkreuz im Spielfeld sichtbar.
-- Die Anzeige für Punkte, Fehler und Zeit bleibt während des Spiels aktiv.
-- Das Spiel läuft während des Tests weiter; die Fehleranzeige reagiert auf Fehlschüsse.
+- Die drei Moorhuhn-Sprites werden vollständig und ohne horizontale Streifen dargestellt.
+- Die schwarzen quadratischen Ecken des JM-Logos sind verschwunden; das kreisförmige Logo bleibt einschließlich seiner inneren schwarzen Konturen erhalten.
+- Die Anzeige flackert während des Spiels nach Rückmeldung des Anwenders nicht mehr.
+- Punkte-, Fehler- und Zeitanzeige funktionieren.
+- Das Fadenkreuz ist während des Spiels sichtbar.
+- Treffer-Rückmeldung und Spielende-Anzeige werden dargestellt.
+- Die schwarzen Hintergründe der Textanzeigen wurden vergrößert, damit die Schrift mehr Abstand zum Rand hat.
 
-**Status:** Fadenkreuz sichtbar und Spielablauf im Anwender-Test funktionsfähig.
+**Status:** Version 0.4 wurde vom Anwender erfolgreich kompiliert und im laufenden Spiel visuell geprüft. Die genannten Bild- und Anzeigeprobleme gelten für diesen Teststand als behoben.
 
-Der Test belegt das Erscheinen des Fadenkreuzes und den fortgesetzten Spielablauf. Eine vollständige Prüfung sämtlicher Randfälle (z. B. Ende exakt bei Zeitablauf, Neustart nach Ablauf und Wechsel aus dem Spielfenster) ist in diesem Nachtrag nicht dokumentiert.
+Die Bildschirmaufnahmen belegen den dargestellten Spielzustand und die Spielende-Anzeige. Sie ersetzen keine systematische Prüfung aller möglichen Spielabläufe oder Randfälle.
 
-## 2. Technische Umsetzung
+## 2. Korrektur der Moorhuhn-Bitmap
 
-### 2.1 Pointer-Ressource
+### 2.1 Ausgangsfehler
 
-Der Fadenkreuzzeiger wird als 16×16-Pixel-Pointerdefinition bereitgestellt:
+Die drei Vogelgrafiken wurden zunächst als horizontale Streifen bzw. Fragmente dargestellt. Die Bitmapdefinition verwendet:
 
-- Datentyp: `PointerDef16`
-- Abmessungen: 16×16 Pixel
-- Hotspot: (7, 7)
-- Pointerdaten: 32 Byte Maske und 32 Byte Bilddaten
-- Ressource: `CursorResource`, als `data shared` deklariert
-- Chunk: `MoorGEOSCrosshair`
+- Abmessungen: 52 × 70 Pixel
+- Farbtiefe: 4 Bit pro Pixel
+- Maskierung: 1 Bit pro Pixel
+- Bitmaptyp: `BMC_UNCOMPACTED`
+- Flags: `BMT_MASK | BMF_4BIT`
+- GString-Längenangabe: 2.316 Byte
 
-Die Ressource wird über `OptrToHandle(@MoorGEOSCrosshair)` gesperrt, während der Pointer gesetzt wird. Anschließend wird der Handle wieder entsperrt.
+### 2.2 Ursache und Korrektur
 
-### 2.2 GenView-Nachricht
+Die beiden Datenebenen waren im Quelltext zunächst vollständig hintereinander abgelegt: erst die gesamte Maske, dann die gesamte Pixelebene. Für das verwendete maskierte Bitmapformat müssen Maske und Bilddaten dagegen zeilenweise verschachtelt sein.
 
-Die Pointerumschaltung erfolgt über:
+Die Daten sind jetzt pro Scanline angeordnet:
 
-`MSG_GEN_VIEW_SET_PTR_IMAGE`
+1. 7 Byte Maskendaten für eine Zeile (52 Pixel, auf Byte-Grenze aufgerundet).
+2. 26 Byte 4-Bit-Pixeldaten für dieselbe Zeile.
+3. Danach folgen Maske und Pixeldaten der nächsten Zeile.
 
-mit der Pointer-Ebene `PIL_WINDOW`.
+Berechnung:
+- Maske: 70 × 7 = 490 Byte
+- Pixeldaten: 70 × 26 = 1.820 Byte
+- Bitmapdaten gesamt: 490 + 1.820 = 2.310 Byte
+- Bitmap-Header: 6 Byte
+- GString-Längenangabe: 2.310 + 6 = 2.316 Byte
 
-Beim Start der Runde wird `@MoorGEOSCrosshair` gesetzt. Für den Rückwechsel zum Standardzeiger wird `NullOptr` übergeben.
+Die Bildpixel selbst wurden bei der Umordnung nicht absichtlich verändert; geändert wurde die Reihenfolge der Masken- und Pixeldaten.
 
-### 2.3 Zustandsübergänge
+**Laufzeitergebnis:** Nach dieser Korrektur werden alle drei Moorhühner vollständig dargestellt. Der Anwender bestätigt außerdem, dass das Flackern nicht mehr auftritt.
 
-Im Spielablauf sind folgende Übergänge vorgesehen:
+## 3. Transparenzmaske des JM-Logos
 
-1. Erster Mausklick startet die 60-Sekunden-Runde und aktiviert den Fadenkreuzzeiger.
-2. Beim Ende der Runde wird der aktive Spielzustand beendet und der Standardzeiger wiederhergestellt.
-3. Beim Start eines neuen Spiels wird der Standardzustand hergestellt; beim erneuten Start der Runde wird das Fadenkreuz wieder aktiviert.
+Das JM-Logo liegt in der separaten Include-Datei `moorgeosaboutlogo.goh` als 72 × 72 Pixel große, unkomprimierte 4-Bit-Bitmap vor.
 
-Die Laufzeitaufnahmen bestätigen das Fadenkreuz während des Spiels. Die genaue Prüfung des automatischen Rückwechsels nach Ablauf und beim Neustart bleibt als separater Testpunkt offen.
+Die ursprüngliche Bitmap hatte keine Transparenzmaske. Dadurch war der schwarze rechteckige Hintergrund sichtbar.
 
-## 3. Build- und Compilerprotokoll
+Für die korrigierte Bitmap wurde eine 1-Bit-Transparenzmaske ergänzt:
+- Abmessungen: 72 × 72 Pixel
+- Maske: 9 Byte pro Zeile
+- Pixeldaten: 36 Byte pro Zeile
+- Datenanordnung: Maske und Pixeldaten zeilenweise verschachtelt
+- Maskendaten: 72 × 9 = 648 Byte
+- Pixeldaten: 72 × 36 = 2.592 Byte
+- Daten zusammen: 3.240 Byte
+- Mit 6 Byte Bitmap-Header: 3.246 Byte
 
-**Build-Umgebung laut Projektangaben:**
+Die Maske macht nur die mit dem äußeren Bildrand verbundenen schwarzen Hintergrundbereiche transparent. Schwarze Innenflächen und Konturen des JM-Motivs bleiben erhalten.
 
-- SDK: `C:\\Geos\\pcgeos`
-- Projekt: `C:\\Geos\\pcgeos\\Local\\MOORGEOS`
-- PMake: `C:\\Geos\\pcgeos\\bin\\pmake.exe`
-- Watcom: `C:\\WATCOM-V2`
+**Laufzeitergebnis:** Im Info-Dialog ist das Logo rund dargestellt; die zuvor sichtbaren schwarzen quadratischen Ecken sind verschwunden.
 
-Aufruf in der DOS-Eingabeaufforderung:
+## 4. Vergrößerte schwarze Text-Hintergründe
+
+Die schwarzen Flächen hinter den Textanzeigen wurden erweitert. Die Textpositionen und Texte blieben unverändert.
+
+| Anzeige | Rechteck vorher | Rechteck Version 0.4 |
+|---|---|---|
+| Punkte / Fehler / Zeit | (4, 4) bis (132, 55) | (0, 4) bis (132, 59) |
+| „KLICK ZUM START“ | (100, 225) bis (300, 245) | (96, 225) bis (300, 249) |
+| „TREFFER!“ / „DANEBEN“ | (142, 225) bis (258, 245) | (138, 225) bis (258, 249) |
+| „SPIEL VORBEI“ | (130, 188) bis (270, 212) | (126, 188) bis (270, 216) |
+
+Die Erweiterung erfolgt nach links und nach unten. Die Schrift wird dadurch nicht mehr so dicht am Rand der schwarzen Flächen dargestellt.
+
+**Laufzeitergebnis:** Der Anwender hat die vergrößerten Flächen in den Screenshots der aktiven Runde und des Spielendes geprüft.
+
+## 5. Build- und Compilerprotokoll für Version 0.4
+
+**Build-Umgebung:**
+- SDK: `C:\Geos\pcgeos`
+- Projekt: `C:\Geos\pcgeos\Local\MOORGEOS`
+- PMake: `C:\Geos\pcgeos\bin\pmake.exe`
+- Open Watcom: `C:\WATCOM-V2`
+
+Der vom Anwender verwendete Build-Aufruf lautet:
 
 ```bat
-cd /d C:\\Geos\\pcgeos\\Local\\MOORGEOS
-C:\\Geos\\pcgeos\\bin\\pmake.exe
+C:\Geos\pcgeos\bin\pmake.exe -n
 ```
 
-### 3.1 Nachgewiesenes Build-Ergebnis
+**Wichtige Klarstellung zur PMake-Option:** In dieser PC/GEOS-PMake-Version bedeutet `-n` „Make non error checking geode“ und führt den Build aus. Die Option `-u` bedeutet dagegen, dass Befehle nur ausgegeben und nicht ausgeführt werden. Die frühere Deutung von `-n` als reiner Vorschau-/Trockenlauf war falsch.
 
-Der vom Anwender übermittelte Buildlauf endete ohne Compilerfehler:
+### 5.1 Vom Anwender übermittelte Build-Ausgabe
 
-- `moorgeos.ec`: 18.364 Zeilen, 53.807 inkludierte Zeilen
-- Warnungen: 0
-- Fehler: 0
-- Codegröße: 3.050 Byte
-- Glue-Ausgabe: `moorgeosec.geo`
-- Glue-Ressource `CursorResource`: 92 Byte, 1 Relocation
-- gemeldete Gesamtgröße: 10.514 Byte
+- GOC-Ausgabe: `moorgeos.nc`
+- GOC-Quelltext: 18.542 Zeilen
+- inkludierte Zeilen: 53.807
+- Compilerwarnungen: 0
+- Compilerfehler: 0
+- Codegröße: 2.861 Byte
+- erzeugtes Objekt: `moorgeos.obj`
+- Glue-Ausgabe: `moorgeos.geo`
+- `CoreBlock`: 0 Byte
+- `dgroup`: 240 Byte, 9 Relocations
+- `moorgeos_TEXT`: 2.856 Byte, 73 Relocations
+- `AppResource`: 416 Byte, 1 Relocation
+- `AppMonikerResource`: 4.488 Byte, 1 Relocation
+- `Interface`: 860 Byte, 1 Relocation
+- `BoardBlock`: 2.540 Byte, 1 Relocation
+- `CursorResource`: 92 Byte, 1 Relocation
+- Glue-Gesamtgröße: 11.492 Byte
 - uninitialisierte Daten/Stack: 2.000 Byte
 
-Damit ist belegt, dass die Cursor-Ressource in `moorgeosec.geo` eingebunden wurde und der Build erfolgreich durchlief.
+**Build-Status:** Erfolgreich; 0 Warnungen und 0 Fehler. Die Ausgabe weist ausdrücklich `moorgeos.geo` aus.
 
-**Wichtig:** Die erfolgreiche Kompilierung von `moorgeosec.geo` ist kein Nachweis, dass eine eigenständige zweite Datei `moorgeos.geo` bereits erzeugt wurde. Diese zweite Variante soll separat gelinkt und anschließend ebenfalls geprüft werden.
+## 6. Projekt- und Kompatibilitätsrahmen
 
-## 4. Projektdateien und Varianten
+Die hier dokumentierte Entwicklung bezieht sich auf PC/GEOS 1.x / GeoWorks 1.x. PC/GEOS 2.x bzw. FreeGEOS ist keine Grundlage für die beschriebenen Änderungen.
 
-| Datei | Bedeutung / Status |
-|---|---|
-| `moorgeos.goc` | GOC-Quelltext mit Spiel- und Pointerimplementierung |
-| `moorgeos.goh` | Headerdatei |
-| `moorgeos.gp` | Projekt-/Glue-Konfiguration |
-| `moorgeosec.geo` | Nach dem dokumentierten Build erzeugtes Programm mit CursorResource |
-| `moorgeos.geo` | Eigenständige zweite Variante; separater Build und Test noch zu bestätigen |
+Die wesentlichen Änderungen von Version 0.4 betreffen:
+- `moorgeos.goc`: zeilenweise verschachtelte Masken- und Pixeldaten für die Vogelgrafik sowie vergrößerte HUD-/Text-Hintergründe.
+- `moorgeosaboutlogo.goh`: Transparenzmaske für das JM-Logo.
 
-Die Varianten dürfen nicht allein durch Umbenennen gleichgesetzt werden. Für die zweite Variante ist der tatsächliche Glue-Aufruf bzw. das Ausgabefile im Buildprotokoll zu prüfen.
+## 7. Offene Prüfpunkte
 
-## 5. PC/GEOS-Kompatibilitätsrahmen
+- [ ] Rückwechsel vom Fadenkreuz zum Standardzeiger nach Ablauf der Runde ausdrücklich prüfen.
+- [ ] Rückwechsel beim Neustart eines Spiels ausdrücklich prüfen.
+- [ ] Weitere Spielrunden und unterschiedliche Treffer-/Fehlschussfolgen systematisch testen.
+- [ ] Die vollständige Projektdateiliste und die Zuordnung der verwendeten Quell- und Include-Dateien im Repository konsolidieren.
 
-Die Implementierung und dieses Dossier beziehen sich auf PC/GEOS 1.x / GeoWorks 1.x. PC/GEOS 2.x bzw. FreeGEOS ist keine Grundlage für die hier dokumentierte Implementierung.
+## 8. Änderungsstatus Version 0.4
 
-## 6. Offene Prüfpunkte
+**Durch Anwender bestätigt:**
+- Vogelgrafiken vollständig und ohne Streifen.
+- JM-Logo ohne schwarze quadratische Ecken.
+- Kein sichtbares Flackern im gezeigten Spieltest.
+- Vergrößerte schwarze Text-Hintergründe.
+- Punkte-, Fehler-, Zeit-, Treffer- und Spielende-Anzeigen im Screenshot sichtbar.
+- Build von `moorgeos.geo` mit 0 Warnungen und 0 Fehlern.
 
-- [ ] Automatischen Rückwechsel zum Standardzeiger nach Ablauf der 60 Sekunden ausdrücklich testen.
-- [ ] Rückwechsel beim Neustart eines Spiels ausdrücklich testen.
-- [ ] Eigenständige Variante `moorgeos.geo` separat linken; Glue-Ausgabe kontrollieren.
-- [ ] Zweite Variante in GeoWorks/PC/GEOS 1.x starten und Laufzeitverhalten prüfen.
-- [ ] Beide Varianten und die zugehörigen Quellstände eindeutig versionieren.
-
-## 7. Änderungsstatus
-
-**Erledigt:** Pointer-Ressource eingebunden, Build von `moorgeosec.geo` erfolgreich, Fadenkreuz im laufenden Spiel durch Anwender sichtbar getestet.
-
-**Noch nicht als erledigt zu deklarieren:** separater Build und Laufzeittest von `moorgeos.geo`; vollständiger Test der Zeitschranke und des automatischen Pointer-Rückwechsels.
+**Nicht als abschließend geprüft deklarieren:** alle Randfälle des Mauszeigerwechsels, sämtliche Spielzustände und eine vollständige Langzeit-/Stabilitätsprüfung.
 
 ---
-*Dokumentationsnachtrag erstellt auf Grundlage des übermittelten Buildprotokolls, der Projektangaben und der Laufzeit-Rückmeldung des Anwenders vom 2. November 2026.*
+*Dokumentationsnachtrag vom 3. November 2026 auf Grundlage der vom Anwender übermittelten PMake-/Compiler-Ausgabe und der Bildschirmaufnahmen vom 3. November 2026.*
