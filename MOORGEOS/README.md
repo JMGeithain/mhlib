@@ -24,7 +24,7 @@ Die nachfolgenden v0.5-Erweiterungen sind noch in Entwicklung und noch nicht im 
 ## Geplante/aktuelle v0.5-Erweiterung
 
 - Versionsanzeige im Infofenster auf `Version 0.5` geändert.
-- Kurzer Schusston beim linken Mausklick ergänzt. Der erste Implementierungsstand verwendet `UserStandardSound(SST_CUSTOM_NOTE, HIGH_E, 20)` aus der PC/GEOS-Sound-API. Der Ton ist ein kurzer Systemton, noch kein speziell gesampelter Schussklang; die Wiedergabe muss im Emulator geprüft werden.
+- Schussklang beim linken Mausklick auf das GEOS-Instrument `IP_GUNSHOT` umgestellt. Der Klang wird mit `SoundAllocMusicNote()` einmalig vorbereitet und anschließend über `UserStandardSound(SST_CUSTOM_SOUND, ...)` wiedergegeben. Die tatsächliche Klangqualität hängt vom Soundtreiber bzw. der Soundhardware ab und muss im Emulator geprüft werden.
 
 ## Build- und Teststatus
 
