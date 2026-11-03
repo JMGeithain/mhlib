@@ -1,16 +1,16 @@
 # GeoMoorhuhn lite – Entwicklungsdossier
 ## Nachtrag: Version 0.4 – Bitmapmasken, flackerfreie Darstellung und HUD-Abstände
-**Stand:** 3. November 2026  
-**Projektbereich:** PC/GEOS 1.x / GeoWorks 1.x  
+**Stand:** 3. November 2026 (Plattformzuordnung korrigiert)  
+**Projektbereich:** PC/GEOS 2.x und höher / FreeGEOS  
 **Projektversion laut Programmfenster:** 0.4  
 **Maßgebliches Repository:** `JMGeithain/mhlib`  
 **Dokumentationsbranch:** `geomoorhuhn-lite-v0.1`
 
-> Dieser Nachtrag ergänzt den vorherigen Stand vom 2. November 2026. Er unterscheidet zwischen den vom Anwender bestätigten Laufzeitergebnissen und den technischen Änderungen am Quelltext.
+> Dieser Nachtrag ergänzt den vorherigen Stand vom 2. November 2026. Eine frühere Fassung bezeichnete die Zielplattform irrtümlich als GeoWorks 1.x; diese Zuordnung ist hier korrigiert. Er unterscheidet zwischen den vom Anwender bestätigten Laufzeitergebnissen und den technischen Änderungen am Quelltext.
 
 ## 1. Zusammenfassung des getesteten Ergebnisses
 
-Der Anwender hat die Version 0.4 in GeoWorks/PC/GEOS gestartet und mit Bildschirmaufnahmen vom 3. November 2026 bestätigt:
+Der Anwender hat die Version 0.4 in PC/GEOS 2.x / FreeGEOS gestartet und mit Bildschirmaufnahmen vom 3. November 2026 bestätigt:
 
 - Die drei Moorhuhn-Sprites werden vollständig und ohne horizontale Streifen dargestellt.
 - Die schwarzen quadratischen Ecken des JM-Logos sind verschwunden; das kreisförmige Logo bleibt einschließlich seiner inneren schwarzen Konturen erhalten.
@@ -134,7 +134,7 @@ C:\Geos\pcgeos\bin\pmake.exe -n
 
 ## 6. Projekt- und Kompatibilitätsrahmen
 
-Die hier dokumentierte Entwicklung bezieht sich auf PC/GEOS 1.x / GeoWorks 1.x. PC/GEOS 2.x bzw. FreeGEOS ist keine Grundlage für die beschriebenen Änderungen.
+Die hier dokumentierte Entwicklung bezieht sich auf PC/GEOS 2.x und höher bis hin zu FreeGEOS. GeoWorks 1.x / PC/GEOS 1.x ist ausdrücklich nicht die Zielplattform dieses Projekts.
 
 Die wesentlichen Änderungen von Version 0.4 betreffen:
 - `moorgeos.goc`: zeilenweise verschachtelte Masken- und Pixeldaten für die Vogelgrafik sowie vergrößerte HUD-/Text-Hintergründe.
