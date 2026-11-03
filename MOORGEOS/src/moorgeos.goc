@@ -1,8 +1,8 @@
 /*
- * MOORGEOS - native FreeGEOS prototype.
- *
- * Stage 2: move the scene into a GenView/VisContent tree and receive
- * mouse-select events on the board. Build with the FreeGEOS SDK; see ANLEITUNG.txt for local build steps.
+ * GeoMoorhuhn lite v0.4
+ * Native GOC game for PC/GEOS 2.x and higher,
+ * including FreeGEOS.
+ * Tested build: 3 November 2026.
  */
 
 @include <stdapp.goh>
