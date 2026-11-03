@@ -1,5 +1,12 @@
 # Änderungsprotokoll
 
+## Version 0.5 – in Entwicklung
+
+- Versionsanzeige im Infofenster auf `Version 0.5` geändert.
+- Ersten Schusston beim linken Mausklick ergänzt: `UserStandardSound(SST_CUSTOM_NOTE, HIGH_E, 20)`.
+- Der Ton ist zunächst ein kurzer GEOS-Standardton (20 ms), noch kein speziell gesampelter Schussklang. Klang und Funktion müssen im Emulator geprüft werden.
+
+
 ## Version 0.4 – 3. November 2026
 
 ### Grafik und Darstellung
