@@ -2,7 +2,7 @@
  * GeoMoorhuhn lite v0.5
  * Native GOC game for PC/GEOS 2.x and higher,
  * including FreeGEOS.
- * Tested build: 3 November 2026.
+ * v0.4 baseline tested 3 November 2026; v0.5 sound change pending test.
  */
 
 @include <stdapp.goh>
@@ -17,6 +17,9 @@
 @endc
 @classdecl MoorGEOSProcessClass, neverSaved;
 @classdecl MoorGEOSBoardClass;
+
+/* Allocated once on first shot and reused for subsequent clicks. */
+MemHandle MoorGEOSGunshot = NullHandle;
 
 @start AppResource;
 
@@ -510,8 +513,15 @@
 {
     byte hitTarget = 0;
 
-    /* Play a short shot tone for every accepted left-click. */
-    UserStandardSound(SST_CUSTOM_NOTE, HIGH_E, 20);
+    /* Prepare the GEOS gunshot instrument once, then reuse its sound handle. */
+    if (MoorGEOSGunshot == NullHandle) {
+        SoundAllocMusicNote(IP_GUNSHOT, 0, MIDDLE_C,
+                            DYNAMIC_FFFF, SSDTT_TEMPO, QUARTER,
+                            &MoorGEOSGunshot);
+    }
+    if (MoorGEOSGunshot != NullHandle) {
+        UserStandardSound(SST_CUSTOM_SOUND, MoorGEOSGunshot, 1);
+    }
 
     if (pself->MGBI_gameFinished) {
         retVal->flags = MRF_PROCESSED;
