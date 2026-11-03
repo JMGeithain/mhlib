@@ -13,6 +13,7 @@ export MoorGEOSBoardClass
 
 library geos
 library ui
+library sound
 
 resource AppResource ui-object
 resource AppMonikerResource lmem, read-only, shared

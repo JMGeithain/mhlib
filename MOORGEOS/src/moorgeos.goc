@@ -1,8 +1,8 @@
 /*
- * GeoMoorhuhn lite v0.4
+ * GeoMoorhuhn lite v0.5
  * Native GOC game for PC/GEOS 2.x and higher,
  * including FreeGEOS.
- * Tested build: 3 November 2026.
+ * v0.4 baseline tested 3 November 2026; v0.5 gunshot sound tested in emulator.
  */
 
 @include <stdapp.goh>
@@ -10,12 +10,16 @@
 #include <graphics.h>
 #include <gstring.h>
 #include <timer.h>
+#include <sound.h>
 @include "moorgeos.goh"
 
 @class MoorGEOSProcessClass, GenProcessClass;
 @endc
 @classdecl MoorGEOSProcessClass, neverSaved;
 @classdecl MoorGEOSBoardClass;
+
+/* Allocated once on first shot and reused for subsequent clicks. */
+MemHandle MoorGEOSGunshot = NullHandle;
 
 @start AppResource;
 
@@ -93,7 +97,7 @@
     GI_visMoniker = "GeoMoorhuhn lite";
 }
 @object GenGlyphClass MoorGEOSAboutLine2 = {
-    GI_visMoniker = "Version 0.4";
+    GI_visMoniker = "Version 0.5";
 }
 @object GenGlyphClass MoorGEOSAboutLogoGlyph = {
     GI_visMoniker = list { @MoorGEOSAboutLogo };
@@ -508,6 +512,16 @@
 @method MoorGEOSBoardClass, MSG_META_START_SELECT
 {
     byte hitTarget = 0;
+
+    /* Prepare the GEOS gunshot instrument once, then reuse its sound handle. */
+    if (MoorGEOSGunshot == NullHandle) {
+        SoundAllocMusicNote(IP_GUNSHOT, 0, MIDDLE_C,
+                            DYNAMIC_FFFF, SSDTT_TEMPO, QUARTER,
+                            &MoorGEOSGunshot);
+    }
+    if (MoorGEOSGunshot != NullHandle) {
+        UserStandardSound(SST_CUSTOM_SOUND, MoorGEOSGunshot, 1);
+    }
 
     if (pself->MGBI_gameFinished) {
         retVal->flags = MRF_PROCESSED;

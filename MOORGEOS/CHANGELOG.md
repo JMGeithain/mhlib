@@ -1,5 +1,14 @@
 # Änderungsprotokoll
 
+## Version 0.5 – im Entwicklungszweig getestet
+
+- Versionsanzeige im Infofenster auf `Version 0.5` geändert.
+- Schussgeräusch auf das GEOS-Instrument `IP_GUNSHOT` umgestellt.
+- Das Instrument wird mit `SoundAllocMusicNote(IP_GUNSHOT, 0, MIDDLE_C, DYNAMIC_FFFF, SSDTT_TEMPO, QUARTER, ...)` vorbereitet und bei Mausklicks über `UserStandardSound(SST_CUSTOM_SOUND, ...)` abgespielt.
+- `library sound` in `src/moorgeos.gp` ergänzt. Damit wird `SoundAllocMusicNote` beim Linken aufgelöst; zuvor trat `SOUNDALLOCMUSICNOTE undefined2` auf.
+- Anwender bestätigt erfolgreichen Build nach Ergänzung der Sound-Bibliothek.
+- Anwender bestätigt den Emulator-Test: Der Klang funktioniert und klingt wie ein Schuss.
+
 ## Version 0.4 – 3. November 2026
 
 ### Grafik und Darstellung
