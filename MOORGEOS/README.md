@@ -2,13 +2,11 @@
 
 Eigenständiges natives GOC-Spielprojekt für **PC/GEOS 2.x und höher bis FreeGEOS**.
 
-**Letzter bestätigter Release-Stand:** Version 0.4. Version 0.5 befindet sich in Entwicklung.
+**Letzter bestätigter Release-Stand:** Version 0.4. Version 0.5 ist im Entwicklungszweig und wurde mit der neuen Schuss-Soundfunktion erfolgreich im Emulator getestet.
 
 > Dieses Projekt ist nicht für GeoWorks 1.x / PC/GEOS 1.x bestimmt.
 
 ## Version 0.4 – bestätigter Funktionsstand
-
-Die nachfolgenden v0.5-Erweiterungen sind noch in Entwicklung und noch nicht im Emulator bestätigt.
 
 - Spielfläche mit Himmel, Boden und Sonne.
 - Drei Moorhuhn-Sprites als 52 × 70 Pixel große, unkomprimierte 4-bpp-Bitmaps mit 1-bpp-Maske.
@@ -21,19 +19,22 @@ Die nachfolgenden v0.5-Erweiterungen sind noch in Entwicklung und noch nicht im 
 - Vergrößerte schwarze Text-Hintergründe für bessere Abstände.
 - Flackerfreie Darstellung im bestätigten Spieltest.
 
-## Geplante/aktuelle v0.5-Erweiterung
+## Version 0.5 – erfolgreich getestete Erweiterung
 
 - Versionsanzeige im Infofenster auf `Version 0.5` geändert.
-- Schussklang beim linken Mausklick auf das GEOS-Instrument `IP_GUNSHOT` umgestellt. Der Klang wird mit `SoundAllocMusicNote()` einmalig vorbereitet und anschließend über `UserStandardSound(SST_CUSTOM_SOUND, ...)` wiedergegeben. Die tatsächliche Klangqualität hängt vom Soundtreiber bzw. der Soundhardware ab und muss im Emulator geprüft werden.
+- Schussgeräusch beim linken Mausklick über das GEOS-Instrument `IP_GUNSHOT`.
+- Das Instrument wird mit `SoundAllocMusicNote()` vorbereitet und über `UserStandardSound(SST_CUSTOM_SOUND, ...)` wiedergegeben.
+- Die GEOS-Sound-Bibliothek ist in `src/moorgeos.gp` mit `library sound` eingebunden.
+- Der Anwender hat den Build nach Ergänzung der Sound-Bibliothek erfolgreich ausgeführt und den Klang im Emulator geprüft. Rückmeldung: Das Geräusch klingt wie ein Schuss und funktioniert einwandfrei.
 
 ## Build- und Teststatus
 
-Der Anwender hat den Build mit seiner PC/GEOS-/FreeGEOS-Entwicklungsumgebung erfolgreich ausgeführt. Übermittelte Compilerdiagnose:
+Der Anwender hat den Build mit seiner PC/GEOS-/FreeGEOS-Entwicklungsumgebung erfolgreich ausgeführt. Die zuvor gemeldete Compilerdiagnose zeigte:
 
 - GOC: 0 Warnungen, 0 Fehler
 - Open Watcom: erfolgreich
-- Glue: `moorgeos.geo` erzeugt
-- Die resultierende Anwendung wurde im Emulator gestartet und visuell getestet.
+- Der erste Linkversuch scheiterte mit `SOUNDALLOCMUSICNOTE undefined2`, weil `library sound` in der Geode-Definition fehlte.
+- Nach Ergänzung von `library sound` wurde die Anwendung erfolgreich gebaut und im Emulator mit funktionierendem Schussgeräusch getestet.
 
 Der Build-Befehl in der verwendeten Umgebung lautet:
 
@@ -49,7 +50,7 @@ Die konkreten lokalen SDK-Pfade können je nach Installation abweichen.
 
 - `src/moorgeos.goc` – Hauptprogramm und Spiel-/Zeichenlogik
 - `src/moorgeos.goh` – Klassen-, Nachrichten- und Instanzdefinitionen
-- `src/moorgeos.gp` – Geode-/Ressourcendefinition
+- `src/moorgeos.gp` – Geode-/Ressourcendefinition einschließlich GEOS-Sound-Bibliothek
 - `src/moorgeosicons.goh` – Anwendungsicons
 - `src/moorgeosaboutlogo.goh` – JM-Logo für den Info-Dialog
 - `src/local.mk` – lokale Build-Konfiguration
