@@ -9,7 +9,8 @@
 - Zwei Animationstakte nach dem Schuss wird ein synthetischer Stimmeffekt über `IP_CHOIR_AAHS` abgespielt, damit er das Schussgeräusch nicht überdeckt. Dies ist keine Sprachaufnahme.
 - Der Falltimer wird beendet, wenn keine Hühner mehr in FALLING/WAITING sind, außerdem bei Spielende und beim Neustart.
 - Versionsanzeige im Infofenster auf `Version 0.6` geändert.
-- **Teststatus:** Quellcode und Dokumentation aktualisiert; v0.6 wurde noch nicht neu kompiliert oder im Emulator geprüft. Die v0.5-Build- und Soundtests bleiben der letzte bestätigte Stand.
+- Erster Buildversuch: GOC meldete zwei Fehler wegen `retVal` im benutzerdefinierten `MSG_MOORGEOS_FALL_TICK`-Handler. Diese Timer-Nachricht besitzt keinen `MouseReturnParams`-Rückgabewert; die beiden unzulässigen `retVal->flags`-Zuweisungen wurden entfernt.
+- Korrektur auf GitHub committed. **Teststatus:** Der korrigierte Stand muss erneut kompiliert werden; ein erfolgreicher v0.6-Build und ein Emulatorlauf sind noch nicht bestätigt. Die v0.5-Build- und Soundtests bleiben der letzte bestätigte Stand.
 
 ## Version 0.5 – im Entwicklungszweig getestet
 
