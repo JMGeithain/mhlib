@@ -7,7 +7,7 @@
 - Der Anwender meldet, dass die v0.6-Treffer-/Fall-/Respawn-Funktion bereits recht gut funktioniert. Die beiden v0.7-Anpassungen müssen noch kompiliert und im Emulator geprüft werden.
 
 
-## Version 0.6 – implementiert, Build-/Emulatortest offen
+## Version 0.6 – im Emulator funktionsfähig
 
 - Trefferprüfung merkt sich, welches der drei fliegenden Hühner getroffen wurde.
 - Nur das getroffene Huhn wechselt in den Zustand FALLING; fallende bzw. ausgeblendete Hühner können nicht erneut getroffen werden.
@@ -17,7 +17,7 @@
 - Der Falltimer wird beendet, wenn keine Hühner mehr in FALLING/WAITING sind, außerdem bei Spielende und beim Neustart.
 - Versionsanzeige im Infofenster auf `Version 0.6` geändert.
 - Erster Buildversuch: GOC meldete zwei Fehler wegen `retVal` im benutzerdefinierten `MSG_MOORGEOS_FALL_TICK`-Handler. Diese Timer-Nachricht besitzt keinen `MouseReturnParams`-Rückgabewert; die beiden unzulässigen `retVal->flags`-Zuweisungen wurden entfernt.
-- Korrektur auf GitHub committed. **Teststatus:** Der korrigierte Stand muss erneut kompiliert werden; ein erfolgreicher v0.6-Build und ein Emulatorlauf sind noch nicht bestätigt. Die v0.5-Build- und Soundtests bleiben der letzte bestätigte Stand.
+- Die Timer-Handler-Korrektur wurde anschließend erfolgreich in den laufenden Entwicklungsstand übernommen. Der Anwender bestätigt, dass Treffer-, Fall- und Respawn-Verhalten in v0.6 im Emulator bereits recht gut funktionieren.
 
 ## Version 0.5 – im Entwicklungszweig getestet
 
