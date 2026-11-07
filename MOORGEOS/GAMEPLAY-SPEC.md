@@ -21,7 +21,7 @@ Ein kleines natives FreeGEOS-Zielschießspiel mit eigener, einfacher Grafik. Der
 - WAITING: Nach dem Aufkommen wird das Huhn kurz ausgeblendet.
 - RESPAWN: Das Huhn erscheint an einer anderen Startposition mit geänderter Flugrichtung und wechselt zurück zu FLYING.
 
-Der Stimmeffekt wird zunächst mit dem FreeGEOS-General-MIDI-Instrument `IP_VOICE_OOHS` erzeugt. Er ist kein aufgezeichnetes menschliches Schreien. Die neue Animation ist in v0.6 implementiert, muss aber noch mit der konkreten Toolchain und im Emulator geprüft werden.
+Der Stimmeffekt wird zunächst mit dem FreeGEOS-General-MIDI-Instrument `IP_CHOIR_AAHS` erzeugt. Er ist kein aufgezeichnetes menschliches Schreien. Die neue Animation ist in v0.6 implementiert, muss aber noch mit der konkreten Toolchain und im Emulator geprüft werden.
 
 ## Reihenfolge der Umsetzung
 
