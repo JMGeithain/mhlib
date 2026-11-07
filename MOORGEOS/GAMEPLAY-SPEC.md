@@ -17,7 +17,7 @@ Ein kleines natives FreeGEOS-Zielschießspiel mit eigener, einfacher Grafik. Der
 ## Trefferreaktion und Zustände je Huhn
 
 - FLYING: Das Huhn bewegt sich und kann getroffen werden.
-- FALLING: Nach einem Treffer wird nur dieses Huhn über einen separaten Animationstimer nach unten bewegt; es ist nicht mehr treffbar. In v0.7 fällt es 18 Pixel pro Animationstakt und erhält ein rotes X als deutlich anderes Treffer-Symbol.
+- FALLING: Nach einem Treffer wird nur dieses Huhn über einen separaten Animationstimer nach unten bewegt; es ist nicht mehr treffbar. In v0.7 fällt es 18 Pixel pro Animationstakt und erhält ein deutlich fettes schwarzes X als Treffer-Symbol.
 - WAITING: Nach dem Aufkommen wird das Huhn kurz ausgeblendet.
 - RESPAWN: Das Huhn erscheint an einer anderen Startposition mit geänderter Flugrichtung und wechselt zurück zu FLYING.
 
