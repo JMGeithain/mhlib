@@ -3,7 +3,7 @@
 ## Version 0.7 – implementiert, Build-/Emulatortest offen
 
 - Fallgeschwindigkeit für alle drei Hühner von 12 auf 18 Pixel pro Animationstakt erhöht (50 % mehr Weg pro Tick); Timerintervall bleibt unverändert.
-- Während ein Huhn im Zustand FALLING ist, wird über dem normalen Moorhuhn-Sprite ein kontrastreiches rotes X mit dunkler Kontur gezeichnet. Beim Respawn verschwindet das Trefferzeichen automatisch, da das Huhn wieder den Zustand FLYING erhält.
+- Während ein Huhn im Zustand FALLING ist, wird über dem normalen Moorhuhn-Sprite ein deutlich fetteres, vollständig schwarzes X aus jeweils fünf parallelen Strichen pro Diagonale gezeichnet (statt des zuvor zu schwach sichtbaren roten X mit Kontur). Beim Respawn verschwindet das Trefferzeichen automatisch, da das Huhn wieder den Zustand FLYING erhält.
 - Der Anwender meldet, dass die v0.6-Treffer-/Fall-/Respawn-Funktion bereits recht gut funktioniert. Die beiden v0.7-Anpassungen müssen noch kompiliert und im Emulator geprüft werden.
 
 
