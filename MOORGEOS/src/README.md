@@ -1,36 +1,65 @@
-# MOORGEOS – Quellstand
+# GeoMoorhuhn lite – Quellstand
 
-## Aktueller Stand
+## Plattform und bestätigter Ausgangsstand
 
-- Native FreeGEOS-GOC-Anwendungsstruktur mit `.gp`, `.goh`, `.goc` und `local.mk` vorhanden.
-- Die UI nutzt eine `GenViewClass` mit einer `VisContentClass`-Spielfläche, angelehnt an das offizielle SDK-Beispiel `Appl/SDK_C/TicTac/tictac.goc`.
-- Die Spielfläche zeichnet eine einfache Landschaft und eine schematische Zielfigur.
-- Klicks prüfen Körper, Kopfbereich und beide Flügel getrennt, statt die gesamte umschließende Rechteckfläche als Treffer zu werten. Der Kopf wird über das Begrenzungsrechteck der gezeichneten Ellipse angenähert. Treffer zählen 10 Punkte und versetzen das Ziel auf eine von drei Positionen; Fehlschüsse werden gezählt. Nach einem Schuss zeigt die Spielfläche vorübergehend den Status „TREFFER!“ oder „DANEBEN“ an.
-- Eine einfache Statusleiste zeigt Punkte und Fehlschüsse über farbige Markierungen.
-- **Neu vorbereitet:** Beim ersten Klick startet eine 60-Sekunden-Runde. Der Timer verwendet `TimerStart(TIMER_EVENT_CONTINUAL, ...)` aus dem offiziellen `timer.h`; bei null wird der Timer gestoppt und die Runde als beendet markiert; weitere Klicks sollen bis „Neues Spiel“ ignoriert werden. `Spiel > Neues Spiel` setzt Zähler und Rundenstatus zurück.
-- Während der Runde wechselt die Zielfigur im Timer-Handler alle zwei Timer-Ticks zwischen drei Positionen. Das ist eine einfache zyklische Bewegung, noch keine zufällige oder flüssige Animation.
-- Die Zeit wird in der Statusleiste vorerst als Balken dargestellt (ein Abschnitt je sechs Sekunden); eine ausgeschriebene Zahl ist noch nicht umgesetzt.
-- **Wichtig: Noch nicht kompiliert oder ausgeführt.** GOC-Syntax, Einbindung von `timer.h`, Event-Zustellung, Timer-Einheiten und Lebenszyklus müssen mit der konkreten SDK-Version geprüft werden. Dies ist ein Entwicklungsentwurf, kein getesteter Build.
-- Keine originalen Moorhuhn-Grafiken oder -Sounds enthalten.
+- Eigenständige native GOC-Anwendung für PC/GEOS 2.x und FreeGEOS; keine Kompatibilitätszusage für GeoWorks 1.x / PC/GEOS 1.x.
+- Das Projekt besitzt eine `GenViewClass` mit einer `VisContentClass`-Spielfläche.
+- Der bisherige Stand v0.5 wurde mit der vorhandenen FreeGEOS-Toolchain erfolgreich kompiliert und im Emulator gestartet. Der Schuss-Sound über `IP_GUNSHOT` wurde dort ebenfalls geprüft.
+- Die neue Trefferreaktion in v0.6 ist im Quellcode umgesetzt, aber noch nicht neu kompiliert oder im Emulator getestet.
 
-## Timer-Referenz
+## Spielszene und bisherige Funktionen
 
-- `CInclude/timer.h`: `TimerStart` erhält Typ, Zielobjekt, erste Verzögerung, Nachrichten-ID, Wiederholintervall und Zeiger auf Timer-ID.
-- Offizielle Beispiele verwenden `TIMER_EVENT_CONTINUAL` mit einer Objekt-Nachricht und beenden Timer mit `TimerStop(handle, id)`.
-- Quellen: [timer.h](https://github.com/bluewaysw/pcgeos/blob/master/CInclude/timer.h), [Magic-Content-Beispiel](https://github.com/bluewaysw/pcgeos/blob/master/Appl/Breadbox/EntPak/Magic/content.goc), [Muncher's TNT](https://github.com/bluewaysw/pcgeos/blob/master/Appl/Breadbox/Arcade/munch/munch.goc).
+- Spielfläche mit Himmel, Wiese, Sonne und drei bewegten 52 × 70 Pixel großen Vogel-Sprites.
+- Mausgesteuertes Fadenkreuz.
+- Treffer- und Fehlschusszähler, Punkteanzeige und 60-Sekunden-Runde.
+- Schussgeräusch über das GEOS-Instrument `IP_GUNSHOT`.
+- Die GEOS-Sound-Bibliothek ist über `library sound` in der Geode-Definition eingebunden.
 
-## Nächste Schritte
+## Version 0.6 – Trefferreaktion
 
-1. Mit der realen FreeGEOS-Toolchain kompilieren und Compilerdiagnosen korrigieren.
-2. Im Emulator prüfen, ob Ansicht, Statusleiste und Spielfläche erscheinen.
-3. Prüfen, ob Klicks ankommen und Timer-Ticks wirklich im Sekundenabstand ausgelöst werden.
-4. Prüfen, dass Rundenende Klicks sperrt und ein neues Spiel keinen alten Timer zurücklässt.
-5. Danach Zielbewegung und bessere Treffergeometrie ergänzen.
+Jedes der drei Hühner besitzt einen eigenen Zustand:
 
-## Referenzen
+- `0`: fliegend und treffbar.
+- `1`: getroffen und fallend.
+- `2`: am Boden angekommen und während der kurzen Respawn-Pause ausgeblendet.
 
-- Offizieller FreeGEOS-Quellcode: https://github.com/bluewaysw/pcgeos
-- TicTac-Beispiel (Mausereignisse und Objektstruktur): https://github.com/bluewaysw/pcgeos/blob/master/Appl/SDK_C/TicTac/tictac.goc
-- Dokumentation: https://bluewaysw.github.io/pcgeos/
+Beim Treffer:
 
-Die Beispiele sind eine Ausgangsbasis, ersetzen aber nicht den Build- und Laufzeittest mit der konkreten installierten SDK-Version.
+1. Die Trefferprüfung merkt sich die Nummer des tatsächlich getroffenen Huhns.
+2. Nur dieses Huhn wechselt in den Fallzustand; die anderen fliegen weiter.
+3. Ein kurzer synthetischer Stimmeffekt wird mit `IP_VOICE_OOHS` angefordert. Es handelt sich um einen General-MIDI-Instrumentklang, nicht um eine echte Sprachaufnahme.
+4. Ein separater schneller Timer bewegt das Huhn nach unten. Die reguläre Spieluhr läuft unabhängig davon weiter.
+5. Nach dem Erreichen der Wiese wird das Huhn für fünf Animationstakte ausgeblendet.
+6. Danach erscheint es an einer anderen Startposition und mit geänderter Flugrichtung wieder.
+
+Fallende oder ausgeblendete Hühner sind nicht erneut treffbar. Der Animationstimer wird beendet, sobald kein Huhn mehr fällt oder auf seinen Wiedereintritt wartet. Bei Spielende und bei „Neues Spiel“ wird er ebenfalls gestoppt.
+
+## Teststatus und offene Prüfungen
+
+**Noch nicht bestätigt für v0.6:** Der Quellcode wurde geändert und dokumentiert; ein erfolgreicher Build oder Emulatorlauf dieser Version liegt noch nicht vor.
+
+Beim nächsten Build-/Emulatortest gezielt prüfen:
+
+1. Kompilierung und Linken mit der vorhandenen `C:\\Geos\\pcgeos`-Toolchain.
+2. Ob `IP_VOICE_OOHS` auf dem installierten Soundtreiber hörbar ist und nicht den Schuss-Sound unerwünscht abschneidet.
+3. Ob das getroffene Huhn sichtbar bis in die Wiese fällt.
+4. Ob nach kurzer Pause genau dieses Huhn wieder erscheint.
+5. Ob die anderen Hühner währenddessen normal weiterfliegen und treffbar bleiben.
+6. Ob mehrere Treffer kurz hintereinander mehrere unabhängige Fall-/Respawn-Abläufe korrekt verarbeiten.
+7. Ob Spielende und „Neues Spiel“ beide Timer zuverlässig beenden bzw. zurücksetzen.
+
+## Relevante Dateien
+
+- `moorgeos.goc` – Zeichen-, Treffer-, Sound- und Timerlogik.
+- `moorgeos.goh` – Nachrichten und Instanzvariablen, einschließlich Zuständen und Respawn-Zählern je Huhn.
+- `moorgeos.gp` – Geode- und Bibliotheksdefinition.
+- `local.mk` – Build-Konfiguration.
+
+## Technische Referenzen
+
+- [FreeGEOS sound.h](https://github.com/bluewaysw/pcgeos/blob/master/CInclude/sound.h) – Instrumente und Sound-API.
+- [FreeGEOS timer.h](https://github.com/bluewaysw/pcgeos/blob/master/CInclude/timer.h) – Timer-API.
+- [FreeGEOS-Quellcode](https://github.com/bluewaysw/pcgeos)
+- [TicTac-Beispiel](https://github.com/bluewaysw/pcgeos/blob/master/Appl/SDK_C/TicTac/tictac.goc)
+
+Die SDK-Referenzen erklären die verwendeten APIs; sie ersetzen nicht den Build- und Laufzeittest mit der konkreten installierten Umgebung.
