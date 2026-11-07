@@ -17,11 +17,11 @@ Ein kleines natives FreeGEOS-Zielschießspiel mit eigener, einfacher Grafik. Der
 ## Trefferreaktion und Zustände je Huhn
 
 - FLYING: Das Huhn bewegt sich und kann getroffen werden.
-- FALLING: Nach einem Treffer wird nur dieses Huhn über einen separaten Animationstimer nach unten bewegt; es ist nicht mehr treffbar.
+- FALLING: Nach einem Treffer wird nur dieses Huhn über einen separaten Animationstimer nach unten bewegt; es ist nicht mehr treffbar. In v0.7 fällt es 18 Pixel pro Animationstakt und erhält ein rotes X als deutlich anderes Treffer-Symbol.
 - WAITING: Nach dem Aufkommen wird das Huhn kurz ausgeblendet.
 - RESPAWN: Das Huhn erscheint an einer anderen Startposition mit geänderter Flugrichtung und wechselt zurück zu FLYING.
 
-Der Stimmeffekt wird zunächst mit dem FreeGEOS-General-MIDI-Instrument `IP_CHOIR_AAHS` erzeugt. Er ist kein aufgezeichnetes menschliches Schreien. Die neue Animation ist in v0.6 implementiert, muss aber noch mit der konkreten Toolchain und im Emulator geprüft werden.
+Der Stimmeffekt wird zunächst mit dem FreeGEOS-General-MIDI-Instrument `IP_CHOIR_AAHS` erzeugt. Er ist kein aufgezeichnetes menschliches Schreien. Die v0.6-Treffer-/Fall-/Respawn-Funktion wurde vom Anwender im Emulator als bereits recht gut funktionierend bestätigt. Die v0.7-Änderungen (schnellerer Fall und rotes Treffer-X) müssen noch mit der konkreten Toolchain gebaut und im Emulator geprüft werden.
 
 ## Reihenfolge der Umsetzung
 
