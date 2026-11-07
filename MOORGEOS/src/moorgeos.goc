@@ -599,10 +599,10 @@ MemHandle MoorGEOSScream = NullHandle;
                 pself->MGBI_bird2Respawn = 0;
                 break;
         }
-        /* The GM Voice Oohs patch supplies a short synthesized, voice-like cry.
+        /* The GM Choir Aahs patch supplies a short synthesized, voice-like cry.
          * It is intentionally separate from the recorded-sample sound path. */
         if (MoorGEOSScream == NullHandle) {
-            SoundAllocMusicNote(IP_VOICE_OOHS, 0, HIGH_A,
+            SoundAllocMusicNote(IP_CHOIR_AAHS, 0, HIGH_A,
                                 DYNAMIC_FFF, SSDTT_TEMPO, QUARTER,
                                 &MoorGEOSScream);
         }
