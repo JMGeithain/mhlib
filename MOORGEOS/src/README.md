@@ -46,7 +46,7 @@ Beim nächsten Build-/Emulatortest gezielt prüfen:
 
 1. Erneute Kompilierung und Linken des korrigierten Stands mit der vorhandenen `C:\\Geos\\pcgeos`-Toolchain.
 2. Ob `IP_CHOIR_AAHS` auf dem installierten Soundtreiber hörbar ist und nicht den Schuss-Sound unerwünscht abschneidet.
-3. Ob das getroffene Huhn mit der erhöhten Geschwindigkeit sichtbar bis in die Wiese fällt und das rote Treffer-X gut erkennbar ist.
+3. Ob das getroffene Huhn mit der erhöhten Geschwindigkeit sichtbar bis in die Wiese fällt und das fette schwarze Treffer-X gut erkennbar ist.
 4. Ob nach kurzer Pause genau dieses Huhn wieder erscheint.
 5. Ob die anderen Hühner währenddessen normal weiterfliegen und treffbar bleiben.
 6. Ob mehrere Treffer kurz hintereinander mehrere unabhängige Fall-/Respawn-Abläufe korrekt verarbeiten.
