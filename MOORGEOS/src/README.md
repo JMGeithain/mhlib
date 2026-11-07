@@ -27,7 +27,7 @@ Beim Treffer:
 
 1. Die Trefferprüfung merkt sich die Nummer des tatsächlich getroffenen Huhns.
 2. Nur dieses Huhn wechselt in den Fallzustand; die anderen fliegen weiter.
-3. Ein kurzer synthetischer Stimmeffekt wird mit `IP_VOICE_OOHS` angefordert. Es handelt sich um einen General-MIDI-Instrumentklang, nicht um eine echte Sprachaufnahme.
+3. Ein kurzer synthetischer Stimmeffekt wird mit `IP_CHOIR_AAHS` angefordert. Es handelt sich um einen General-MIDI-Instrumentklang, nicht um eine echte Sprachaufnahme.
 4. Ein separater schneller Timer bewegt das Huhn nach unten. Die reguläre Spieluhr läuft unabhängig davon weiter.
 5. Nach dem Erreichen der Wiese wird das Huhn für fünf Animationstakte ausgeblendet.
 6. Danach erscheint es an einer anderen Startposition und mit geänderter Flugrichtung wieder.
@@ -41,7 +41,7 @@ Fallende oder ausgeblendete Hühner sind nicht erneut treffbar. Der Animationsti
 Beim nächsten Build-/Emulatortest gezielt prüfen:
 
 1. Kompilierung und Linken mit der vorhandenen `C:\\Geos\\pcgeos`-Toolchain.
-2. Ob `IP_VOICE_OOHS` auf dem installierten Soundtreiber hörbar ist und nicht den Schuss-Sound unerwünscht abschneidet.
+2. Ob `IP_CHOIR_AAHS` auf dem installierten Soundtreiber hörbar ist und nicht den Schuss-Sound unerwünscht abschneidet.
 3. Ob das getroffene Huhn sichtbar bis in die Wiese fällt.
 4. Ob nach kurzer Pause genau dieses Huhn wieder erscheint.
 5. Ob die anderen Hühner währenddessen normal weiterfliegen und treffbar bleiben.
