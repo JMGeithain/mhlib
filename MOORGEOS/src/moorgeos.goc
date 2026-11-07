@@ -445,19 +445,34 @@ MemHandle MoorGEOSScream = NullHandle;
             GrDrawGString(gstate, birdGString, birdX, birdY, 0, (word*)0);
             GrDestroyGString(birdGString, 0, GSKT_LEAVE_DATA);
 
-            /* A falling bird gets a clearly different hit-state symbol:
-             * a dark-edged red X over its body. */
+            /* A falling bird gets a bold, black hit-state X.
+             * Parallel strokes make it visible even on a busy sprite. */
             if (birdState == 1) {
                 GrSetLineColor(gstate, CF_INDEX, C_BLACK, 0, 0);
+
+                /* First diagonal: thickened with five parallel strokes. */
+                GrDrawLine(gstate, birdX + 16, birdY + 34,
+                           birdX + 32, birdY + 50);
+                GrDrawLine(gstate, birdX + 17, birdY + 34,
+                           birdX + 33, birdY + 50);
                 GrDrawLine(gstate, birdX + 18, birdY + 34,
                            birdX + 34, birdY + 50);
+                GrDrawLine(gstate, birdX + 19, birdY + 34,
+                           birdX + 35, birdY + 50);
+                GrDrawLine(gstate, birdX + 20, birdY + 34,
+                           birdX + 36, birdY + 50);
+
+                /* Second diagonal: same thickness and solid black. */
+                GrDrawLine(gstate, birdX + 32, birdY + 34,
+                           birdX + 16, birdY + 50);
+                GrDrawLine(gstate, birdX + 33, birdY + 34,
+                           birdX + 17, birdY + 50);
                 GrDrawLine(gstate, birdX + 34, birdY + 34,
                            birdX + 18, birdY + 50);
-                GrSetLineColor(gstate, CF_INDEX, C_LIGHT_RED, 0, 0);
-                GrDrawLine(gstate, birdX + 19, birdY + 34,
-                           birdX + 34, birdY + 49);
-                GrDrawLine(gstate, birdX + 34, birdY + 34,
-                           birdX + 19, birdY + 49);
+                GrDrawLine(gstate, birdX + 35, birdY + 34,
+                           birdX + 19, birdY + 50);
+                GrDrawLine(gstate, birdX + 36, birdY + 34,
+                           birdX + 20, birdY + 50);
             }
         }
     }
