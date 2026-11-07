@@ -641,7 +641,7 @@ MemHandle MoorGEOSScream = NullHandle;
             pself->MGBI_fallTimerHandle = 0;
             pself->MGBI_fallTimerID = 0;
         }
-        retVal->flags = MRF_PROCESSED;
+
         return;
     }
 
@@ -734,7 +734,7 @@ MemHandle MoorGEOSScream = NullHandle;
         pself->MGBI_fallTimerID = 0;
     }
     @send self::MSG_VIS_INVALIDATE();
-    retVal->flags = MRF_PROCESSED;
+
 }
 
 /* Move each chicken across the field once per second, then update the clock. */
