@@ -5,7 +5,7 @@
 - Eigenständige native GOC-Anwendung für PC/GEOS 2.x und FreeGEOS; keine Kompatibilitätszusage für GeoWorks 1.x / PC/GEOS 1.x.
 - Das Projekt besitzt eine `GenViewClass` mit einer `VisContentClass`-Spielfläche.
 - Der bisherige Stand v0.5 wurde mit der vorhandenen FreeGEOS-Toolchain erfolgreich kompiliert und im Emulator gestartet. Der Schuss-Sound über `IP_GUNSHOT` wurde dort ebenfalls geprüft.
-- Die neue Trefferreaktion in v0.6 ist im Quellcode umgesetzt, aber noch nicht neu kompiliert oder im Emulator getestet.
+- Die neue Trefferreaktion in v0.6 ist im Quellcode umgesetzt. Der erste Buildversuch meldete zwei GOC-Fehler im eigenen Timer-Handler: Dort wurde `retVal` verwendet, obwohl die benutzerdefinierte Timer-Nachricht keinen Rückgabewert besitzt. Beide unzulässigen Zugriffe wurden anschließend entfernt und auf GitHub korrigiert. Der korrigierte Stand muss erneut kompiliert und im Emulator getestet werden.
 
 ## Spielszene und bisherige Funktionen
 
@@ -36,11 +36,11 @@ Fallende oder ausgeblendete Hühner sind nicht erneut treffbar. Der Animationsti
 
 ## Teststatus und offene Prüfungen
 
-**Noch nicht bestätigt für v0.6:** Der Quellcode wurde geändert und dokumentiert; ein erfolgreicher Build oder Emulatorlauf dieser Version liegt noch nicht vor.
+**Noch nicht bestätigt für v0.6:** Der erste Buildversuch schlug mit zwei GOC-Fehlern im `MSG_MOORGEOS_FALL_TICK` fehl (`retVal` nicht deklariert). Ursache: Ein eigener Timer-Handler hat keinen `MouseReturnParams`-Rückgabewert. Die beiden `retVal->flags`-Zuweisungen wurden entfernt und die Korrektur auf GitHub committed. Ein erneuter Build des korrigierten Stands steht noch aus; ein Emulatorlauf liegt ebenfalls noch nicht vor.
 
 Beim nächsten Build-/Emulatortest gezielt prüfen:
 
-1. Kompilierung und Linken mit der vorhandenen `C:\\Geos\\pcgeos`-Toolchain.
+1. Erneute Kompilierung und Linken des korrigierten Stands mit der vorhandenen `C:\\Geos\\pcgeos`-Toolchain.
 2. Ob `IP_CHOIR_AAHS` auf dem installierten Soundtreiber hörbar ist und nicht den Schuss-Sound unerwünscht abschneidet.
 3. Ob das getroffene Huhn sichtbar bis in die Wiese fällt.
 4. Ob nach kurzer Pause genau dieses Huhn wieder erscheint.
