@@ -5,7 +5,7 @@
 - Eigenständige native GOC-Anwendung für PC/GEOS 2.x und FreeGEOS; keine Kompatibilitätszusage für GeoWorks 1.x / PC/GEOS 1.x.
 - Das Projekt besitzt eine `GenViewClass` mit einer `VisContentClass`-Spielfläche.
 - Der bisherige Stand v0.5 wurde mit der vorhandenen FreeGEOS-Toolchain erfolgreich kompiliert und im Emulator gestartet. Der Schuss-Sound über `IP_GUNSHOT` wurde dort ebenfalls geprüft.
-- Die neue Trefferreaktion in v0.6 ist im Quellcode umgesetzt. Der erste Buildversuch meldete zwei GOC-Fehler im eigenen Timer-Handler: Dort wurde `retVal` verwendet, obwohl die benutzerdefinierte Timer-Nachricht keinen Rückgabewert besitzt. Beide unzulässigen Zugriffe wurden anschließend entfernt und auf GitHub korrigiert. Der korrigierte Stand muss erneut kompiliert und im Emulator getestet werden.
+- Version 0.5 wurde erfolgreich kompiliert und im Emulator gestartet; der Schuss-Sound über `IP_GUNSHOT` wurde dort geprüft. Die Timer-Handler-Korrektur aus der Entwicklung von v0.6 ist im aktuellen Quellstand enthalten. Version 0.6 wurde anschließend im Emulator mit Treffer-, Fall- und Respawn-Verhalten geprüft.
 
 ## Spielszene und bisherige Funktionen
 
@@ -36,13 +36,13 @@ Beim Treffer:
 
 Fallende oder ausgeblendete Hühner sind nicht erneut treffbar. Der Animationstimer wird beendet, sobald kein Huhn mehr fällt oder auf seinen Wiedereintritt wartet. Bei Spielende und bei „Neues Spiel“ wird er ebenfalls gestoppt.
 
-## Teststatus und offene Prüfungen
+## Teststatus und weitere Prüfpunkte
 
 **v0.6:** Der Anwender bestätigt, dass die Trefferreaktion im Emulator bereits recht gut funktioniert. Die zunächst aufgetretenen GOC-Fehler im Timer-Handler wurden korrigiert.
 
-**v0.7 – Build-/Emulatortest offen:** Die Fallgeschwindigkeit wurde von 12 auf 18 Pixel pro Animationstakt erhöht. Während Zustand `1` (fallend) wird nun zusätzlich ein deutlich fetteres, vollständig schwarzes X über dem Huhn gezeichnet (fünf parallele Striche je Diagonale); das fliegende Sprite bleibt unverändert. Diese Änderungen müssen noch gebaut und im Emulator visuell geprüft werden.
+**v0.7 – erfolgreich gebaut und im Emulator getestet:** Die Fallgeschwindigkeit wurde von 12 auf 18 Pixel pro Animationstakt erhöht. Während Zustand `1` (fallend) wird nun zusätzlich ein deutlich fetteres, vollständig schwarzes X über dem Huhn gezeichnet (fünf parallele Striche je Diagonale); das fliegende Sprite bleibt unverändert. Der Anwender bestätigt, dass diese Änderungen im Emulator einwandfrei funktionieren.
 
-Beim nächsten Build-/Emulatortest gezielt prüfen:
+Für spätere Weiterentwicklung und Regressionstests im Blick behalten:
 
 1. Erneute Kompilierung und Linken des korrigierten Stands mit der vorhandenen `C:\\Geos\\pcgeos`-Toolchain.
 2. Ob `IP_CHOIR_AAHS` auf dem installierten Soundtreiber hörbar ist und nicht den Schuss-Sound unerwünscht abschneidet.
