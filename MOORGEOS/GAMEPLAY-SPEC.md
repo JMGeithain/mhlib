@@ -21,7 +21,7 @@ Ein kleines natives FreeGEOS-Zielschießspiel mit eigener, einfacher Grafik. Der
 - WAITING: Nach dem Aufkommen wird das Huhn kurz ausgeblendet.
 - RESPAWN: Das Huhn erscheint an einer anderen Startposition mit geänderter Flugrichtung und wechselt zurück zu FLYING.
 
-Der Stimmeffekt wird zunächst mit dem FreeGEOS-General-MIDI-Instrument `IP_CHOIR_AAHS` erzeugt. Er ist kein aufgezeichnetes menschliches Schreien. Die v0.6-Treffer-/Fall-/Respawn-Funktion wurde vom Anwender im Emulator als bereits recht gut funktionierend bestätigt. Die v0.7-Änderungen (schnellerer Fall und rotes Treffer-X) müssen noch mit der konkreten Toolchain gebaut und im Emulator geprüft werden.
+Der Stimmeffekt wird zunächst mit dem FreeGEOS-General-MIDI-Instrument `IP_CHOIR_AAHS` erzeugt. Er ist kein aufgezeichnetes menschliches Schreien. Die v0.6-Treffer-/Fall-/Respawn-Funktion sowie die v0.7-Anpassungen (schnelleres Fallen und kräftiges schwarzes Treffer-X) wurden vom Anwender im Emulator als bereits recht gut funktionierend bestätigt. Die v0.7-Änderungen (schnellerer Fall und rotes Treffer-X) müssen noch mit der konkreten Toolchain gebaut und im Emulator geprüft werden.
 
 ## Reihenfolge der Umsetzung
 
