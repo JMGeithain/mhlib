@@ -1,5 +1,16 @@
 # Änderungsprotokoll
 
+## Version 0.6 – implementiert, Build-/Emulatortest offen
+
+- Trefferprüfung merkt sich, welches der drei fliegenden Hühner getroffen wurde.
+- Nur das getroffene Huhn wechselt in den Zustand FALLING; fallende bzw. ausgeblendete Hühner können nicht erneut getroffen werden.
+- Separater schneller GEOS-Timer animiert das Huhn nach unten, unabhängig von der 60-Sekunden-Spieluhr.
+- Nach dem Aufkommen wird das Huhn fünf Animationstakte ausgeblendet und erscheint anschließend an einer anderen Startposition mit geänderter Flugrichtung wieder.
+- Treffer lösen zusätzlich zum Schuss-Sound einen synthetischen Stimmeffekt über das General-MIDI-Instrument `IP_VOICE_OOHS` aus. Dies ist keine Sprachaufnahme.
+- Der Falltimer wird beendet, wenn keine Hühner mehr in FALLING/WAITING sind, außerdem bei Spielende und beim Neustart.
+- Versionsanzeige im Infofenster auf `Version 0.6` geändert.
+- **Teststatus:** Quellcode und Dokumentation aktualisiert; v0.6 wurde noch nicht neu kompiliert oder im Emulator geprüft. Die v0.5-Build- und Soundtests bleiben der letzte bestätigte Stand.
+
 ## Version 0.5 – im Entwicklungszweig getestet
 
 - Versionsanzeige im Infofenster auf `Version 0.5` geändert.
