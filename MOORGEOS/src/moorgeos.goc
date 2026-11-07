@@ -599,16 +599,8 @@ MemHandle MoorGEOSScream = NullHandle;
                 pself->MGBI_bird2Respawn = 0;
                 break;
         }
-        /* The GM Choir Aahs patch supplies a short synthesized, voice-like cry.
-         * It is intentionally separate from the recorded-sample sound path. */
-        if (MoorGEOSScream == NullHandle) {
-            SoundAllocMusicNote(IP_CHOIR_AAHS, 0, HIGH_A,
-                                DYNAMIC_FFF, SSDTT_TEMPO, QUARTER,
-                                &MoorGEOSScream);
-        }
-        if (MoorGEOSScream != NullHandle) {
-            UserStandardSound(SST_CUSTOM_SOUND, MoorGEOSScream, 1);
-        }
+        /* Delay the cry briefly so it follows, rather than masks, the shot. */
+        pself->MGBI_screamDelay = 2;
         /* Animate the fall at six frames per second; the game clock remains
          * on its independent one-second timer. */
         if (pself->MGBI_fallTimerHandle == 0) {
@@ -651,6 +643,20 @@ MemHandle MoorGEOSScream = NullHandle;
         }
         retVal->flags = MRF_PROCESSED;
         return;
+    }
+
+    if (pself->MGBI_screamDelay > 0) {
+        pself->MGBI_screamDelay--;
+        if (pself->MGBI_screamDelay == 0) {
+            if (MoorGEOSScream == NullHandle) {
+                SoundAllocMusicNote(IP_CHOIR_AAHS, 0, HIGH_A,
+                                    DYNAMIC_FFF, SSDTT_TEMPO, QUARTER,
+                                    &MoorGEOSScream);
+            }
+            if (MoorGEOSScream != NullHandle) {
+                UserStandardSound(SST_CUSTOM_SOUND, MoorGEOSScream, 1);
+            }
+        }
     }
 
     if (pself->MGBI_bird0State == 1) {
@@ -866,6 +872,7 @@ MemHandle MoorGEOSScream = NullHandle;
     pself->MGBI_bird0Respawn = 0;
     pself->MGBI_bird1Respawn = 0;
     pself->MGBI_bird2Respawn = 0;
+    pself->MGBI_screamDelay = 0;
     pself->MGBI_gameActive = 0;
     pself->MGBI_gameFinished = 0;
     pself->MGBI_lastShotState = 0;
