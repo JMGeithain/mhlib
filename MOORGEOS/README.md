@@ -2,7 +2,7 @@
 
 Eigenständiges natives GOC-Spielprojekt für **PC/GEOS 2.x und höher bis FreeGEOS**.
 
-**Letzter bestätigter und im Emulator getesteter Stand:** Version 0.5. Version 0.6 enthält die neue Trefferreaktion mit Schrei-Effekt, fallendem Huhn und anschließendem Respawn; diese Erweiterung ist im Quellcode umgesetzt, aber noch nicht kompiliert oder im Emulator geprüft.
+**Zuletzt vom Anwender im Emulator bestätigt:** Version 0.6 mit Schuss, Trefferreaktion, Stimmeffekt, fallendem Huhn und Respawn funktioniert bereits recht gut. Version 0.7 ergänzt ein schnelleres Fallen und ein deutliches Treffer-Symbol; diese beiden Änderungen sind im Quellcode umgesetzt und warten auf den nächsten Build-/Emulatortest.
 
 > Dieses Projekt ist nicht für GeoWorks 1.x / PC/GEOS 1.x bestimmt.
 
@@ -27,18 +27,24 @@ Eigenständiges natives GOC-Spielprojekt für **PC/GEOS 2.x und höher bis FreeG
 - Die GEOS-Sound-Bibliothek ist in `src/moorgeos.gp` mit `library sound` eingebunden.
 - Der Anwender hat den Build nach Ergänzung der Sound-Bibliothek erfolgreich ausgeführt und den Klang im Emulator geprüft. Rückmeldung: Das Geräusch klingt wie ein Schuss und funktioniert einwandfrei.
 
-## Version 0.6 – implementiert, Test noch offen
+## Version 0.6 – im Emulator funktionsfähig
 
 - Beim Treffer wird genau das getroffene, gerade fliegende Huhn in den Zustand „fallend“ versetzt. Fallende und kurzzeitig ausgeblendete Hühner können nicht erneut getroffen werden.
 - Ein eigener schneller GEOS-Timer bewegt das Huhn sichtbar nach unten bis in den Wiesenbereich. Die unabhängige 60-Sekunden-Spieluhr bleibt davon unberührt.
 - Nach dem Aufkommen verschwindet das Huhn kurz und erscheint anschließend an einer anderen Startposition mit geänderter Flugrichtung wieder.
 - Kurz nach dem Schuss ertönt zusätzlich ein kurzer synthetischer Stimmeffekt über das General-MIDI-Instrument `IP_CHOIR_AAHS`; die kleine Verzögerung soll verhindern, dass der Schrei das Schussgeräusch überdeckt. Das ist ein instrumentell erzeugter Stimmeffekt, keine Sprachaufnahme.
 - Die Zustände und der zusätzliche Animationstimer werden bei „Neues Spiel“ zurückgesetzt und bei Spielende gestoppt.
-- **Noch offen:** Version 0.6 muss mit der lokalen FreeGEOS-Toolchain kompiliert und im Emulator auf Timerverhalten, Soundwiedergabe, Treffer während paralleler Animationen und Neustart geprüft werden.
+- Der Anwender bestätigt, dass diese Trefferreaktion im Emulator bereits recht gut funktioniert.
+
+## Version 0.7 – implementiert, Test noch offen
+
+- Das getroffene Huhn fällt mit 18 statt 12 Pixeln pro Animationstakt (50 % schneller bei unverändertem Timerintervall).
+- Während des Falls erhält es ein rotes X mit dunkler Kontur als gut sichtbares Treffer-Symbol; beim Respawn wird wieder das normale fliegende Sprite gezeigt.
+- **Noch offen:** v0.7 bauen und im Emulator Falltempo, Sichtbarkeit/Position des Treffer-X und das Zurückschalten auf das normale Sprite beim Respawn prüfen.
 
 ## Build- und Teststatus
 
-Der Anwender hat Version 0.4 erfolgreich gebaut und im Emulator geprüft; Version 0.5 wurde nach Ergänzung der Sound-Bibliothek ebenfalls erfolgreich gebaut und mit Schussgeräusch getestet. Die neue Version 0.6 ist davon zu unterscheiden und noch nicht getestet. Die zuvor gemeldete Compilerdiagnose zeigte:
+Der Anwender hat Version 0.4 erfolgreich gebaut und im Emulator geprüft; Version 0.5 wurde nach Ergänzung der Sound-Bibliothek ebenfalls erfolgreich gebaut und mit Schussgeräusch getestet. Die neue Version 0.6 ist davon zu unterscheiden und wurde inzwischen vom Anwender im Emulator als bereits recht gut funktionierend bestätigt; v0.7 wartet auf den Test. Die zuvor gemeldete Compilerdiagnose zeigte:
 
 - GOC: 0 Warnungen, 0 Fehler
 - Open Watcom: erfolgreich
