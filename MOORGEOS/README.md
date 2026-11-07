@@ -2,7 +2,7 @@
 
 Eigenständiges natives GOC-Spielprojekt für **PC/GEOS 2.x und höher bis FreeGEOS**.
 
-**Letzter bestätigter Release-Stand:** Version 0.4. Version 0.5 ist im Entwicklungszweig und wurde mit der neuen Schuss-Soundfunktion erfolgreich im Emulator getestet.
+**Letzter bestätigter und im Emulator getesteter Stand:** Version 0.5. Version 0.6 enthält die neue Trefferreaktion mit Schrei-Effekt, fallendem Huhn und anschließendem Respawn; diese Erweiterung ist im Quellcode umgesetzt, aber noch nicht kompiliert oder im Emulator geprüft.
 
 > Dieses Projekt ist nicht für GeoWorks 1.x / PC/GEOS 1.x bestimmt.
 
@@ -27,9 +27,18 @@ Eigenständiges natives GOC-Spielprojekt für **PC/GEOS 2.x und höher bis FreeG
 - Die GEOS-Sound-Bibliothek ist in `src/moorgeos.gp` mit `library sound` eingebunden.
 - Der Anwender hat den Build nach Ergänzung der Sound-Bibliothek erfolgreich ausgeführt und den Klang im Emulator geprüft. Rückmeldung: Das Geräusch klingt wie ein Schuss und funktioniert einwandfrei.
 
+## Version 0.6 – implementiert, Test noch offen
+
+- Beim Treffer wird genau das getroffene, gerade fliegende Huhn in den Zustand „fallend“ versetzt. Fallende und kurzzeitig ausgeblendete Hühner können nicht erneut getroffen werden.
+- Ein eigener schneller GEOS-Timer bewegt das Huhn sichtbar nach unten bis in den Wiesenbereich. Die unabhängige 60-Sekunden-Spieluhr bleibt davon unberührt.
+- Nach dem Aufkommen verschwindet das Huhn kurz und erscheint anschließend an einer anderen Startposition mit geänderter Flugrichtung wieder.
+- Beim Treffer wird zusätzlich zum Schussgeräusch ein kurzer synthetischer Stimmeffekt über das General-MIDI-Instrument `IP_VOICE_OOHS` angefordert. Das ist ein instrumentell erzeugter Stimmeffekt, keine Sprachaufnahme.
+- Die Zustände und der zusätzliche Animationstimer werden bei „Neues Spiel“ zurückgesetzt und bei Spielende gestoppt.
+- **Noch offen:** Version 0.6 muss mit der lokalen FreeGEOS-Toolchain kompiliert und im Emulator auf Timerverhalten, Soundwiedergabe, Treffer während paralleler Animationen und Neustart geprüft werden.
+
 ## Build- und Teststatus
 
-Der Anwender hat den Build mit seiner PC/GEOS-/FreeGEOS-Entwicklungsumgebung erfolgreich ausgeführt. Die zuvor gemeldete Compilerdiagnose zeigte:
+Der Anwender hat Version 0.4 erfolgreich gebaut und im Emulator geprüft; Version 0.5 wurde nach Ergänzung der Sound-Bibliothek ebenfalls erfolgreich gebaut und mit Schussgeräusch getestet. Die neue Version 0.6 ist davon zu unterscheiden und noch nicht getestet. Die zuvor gemeldete Compilerdiagnose zeigte:
 
 - GOC: 0 Warnungen, 0 Fehler
 - Open Watcom: erfolgreich
