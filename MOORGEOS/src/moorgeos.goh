@@ -22,6 +22,7 @@
     @instance byte MGBI_bird0Respawn = 0;
     @instance byte MGBI_bird1Respawn = 0;
     @instance byte MGBI_bird2Respawn = 0;
+    @instance byte MGBI_screamDelay = 0;
     @instance byte MGBI_bird0Down = 1;
     @instance byte MGBI_bird1Down = 0;
     @instance byte MGBI_bird2Down = 1;
