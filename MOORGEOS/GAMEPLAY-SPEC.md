@@ -7,12 +7,21 @@ Ein kleines natives FreeGEOS-Zielschießspiel mit eigener, einfacher Grafik. Der
 ## Runde
 
 - Eine Runde dauert zunächst 60 Sekunden.
-- Es gibt zunächst genau ein Ziel auf einer statischen Wiese.
+- Es gibt drei bewegte Moorhuhn-Sprites auf einer Wiese.
 - Ein Klick innerhalb der Trefferfläche zählt als Treffer und bringt 10 Punkte.
 - Ein Klick außerhalb des Ziels zählt als Fehlschuss.
-- Nach einem Treffer wird das Ziel an eine andere, vorab definierte Position versetzt.
+- Bei einem Treffer ertönt neben dem Schussgeräusch ein kurzer synthetischer Stimmeffekt. Das getroffene Huhn fällt sichtbar nach unten, verschwindet nach dem Aufkommen kurz und erscheint danach an einer anderen Startposition wieder. Die anderen Hühner fliegen währenddessen weiter.
 - Die Runde endet, wenn die Zeit abgelaufen ist; danach bleiben Punktestand und Endstatus sichtbar.
 - „Neues Spiel“ setzt Zeit, Punktestand und Zielposition zurück.
+
+## Trefferreaktion und Zustände je Huhn
+
+- FLYING: Das Huhn bewegt sich und kann getroffen werden.
+- FALLING: Nach einem Treffer wird nur dieses Huhn über einen separaten Animationstimer nach unten bewegt; es ist nicht mehr treffbar.
+- WAITING: Nach dem Aufkommen wird das Huhn kurz ausgeblendet.
+- RESPAWN: Das Huhn erscheint an einer anderen Startposition mit geänderter Flugrichtung und wechselt zurück zu FLYING.
+
+Der Stimmeffekt wird zunächst mit dem FreeGEOS-General-MIDI-Instrument `IP_VOICE_OOHS` erzeugt. Er ist kein aufgezeichnetes menschliches Schreien. Die neue Animation ist in v0.6 implementiert, muss aber noch mit der konkreten Toolchain und im Emulator geprüft werden.
 
 ## Reihenfolge der Umsetzung
 
@@ -40,6 +49,10 @@ Für den ersten Build sollte die Spielmechanik nicht an Echtzeitbewegung gekoppe
 - Mehrere schnelle Klicks: kein Absturz und keine doppelte Auswertung eines einzelnen Klickereignisses.
 - Neustart: Punktestand und Rundenstatus zurückgesetzt.
 - Ende der Runde: weitere Klicks verändern den Endpunktestand nicht.
+- Treffer auf eines der drei Hühner: nur das getroffene Huhn fällt; die beiden anderen bleiben in Bewegung.
+- Treffer während ein anderes Huhn fällt: beide Abläufe laufen unabhängig.
+- Respawn: das gefallene Huhn erscheint nach kurzer Pause an einer neuen Position.
+- Spielende/Neustart während eines Falls: der Animationstimer wird beendet und der Zustand beim Neustart zurückgesetzt.
 - Fenster verdecken und wieder freilegen: die Szene wird vollständig neu gezeichnet.
 
 ## Technische Referenz für Mausereignisse
