@@ -1,9 +1,9 @@
 /*
- * GeoMoorhuhn lite v0.6
+ * GeoMoorhuhn lite v0.7
  * Native GOC game for PC/GEOS 2.x and higher,
  * including FreeGEOS.
- * v0.5 gunshot sound tested in emulator. v0.6 adds a hit/fall/respawn
- * sequence and a synthesized voice-like hit cry; this addition awaits testing.
+ * v0.6 hit/fall/respawn behavior is running in the user's emulator.
+ * v0.7 makes the fall faster and adds a distinct hit marker.
  */
 
 @include <stdapp.goh>
@@ -99,7 +99,7 @@ MemHandle MoorGEOSScream = NullHandle;
     GI_visMoniker = "GeoMoorhuhn lite";
 }
 @object GenGlyphClass MoorGEOSAboutLine2 = {
-    GI_visMoniker = "Version 0.6";
+    GI_visMoniker = "Version 0.7";
 }
 @object GenGlyphClass MoorGEOSAboutLogoGlyph = {
     GI_visMoniker = list { @MoorGEOSAboutLogo };
@@ -444,6 +444,21 @@ MemHandle MoorGEOSScream = NullHandle;
                                           PtrToOffset(birdGraphicData));
             GrDrawGString(gstate, birdGString, birdX, birdY, 0, (word*)0);
             GrDestroyGString(birdGString, 0, GSKT_LEAVE_DATA);
+
+            /* A falling bird gets a clearly different hit-state symbol:
+             * a dark-edged red X over its body. */
+            if (birdState == 1) {
+                GrSetLineColor(gstate, CF_INDEX, C_BLACK, 0, 0);
+                GrDrawLine(gstate, birdX + 18, birdY + 34,
+                           birdX + 34, birdY + 50);
+                GrDrawLine(gstate, birdX + 34, birdY + 34,
+                           birdX + 18, birdY + 50);
+                GrSetLineColor(gstate, CF_INDEX, C_LIGHT_RED, 0, 0);
+                GrDrawLine(gstate, birdX + 19, birdY + 34,
+                           birdX + 34, birdY + 49);
+                GrDrawLine(gstate, birdX + 34, birdY + 34,
+                           birdX + 19, birdY + 49);
+            }
         }
     }
 
@@ -660,7 +675,7 @@ MemHandle MoorGEOSScream = NullHandle;
     }
 
     if (pself->MGBI_bird0State == 1) {
-        pself->MGBI_bird0Y += 12;
+        pself->MGBI_bird0Y += 18;
         if (pself->MGBI_bird0Y >= 148) {
             pself->MGBI_bird0Y = 148;
             pself->MGBI_bird0State = 2;
@@ -683,7 +698,7 @@ MemHandle MoorGEOSScream = NullHandle;
     if (pself->MGBI_bird0State != 0) active = 1;
 
     if (pself->MGBI_bird1State == 1) {
-        pself->MGBI_bird1Y += 12;
+        pself->MGBI_bird1Y += 18;
         if (pself->MGBI_bird1Y >= 148) {
             pself->MGBI_bird1Y = 148;
             pself->MGBI_bird1State = 2;
@@ -706,7 +721,7 @@ MemHandle MoorGEOSScream = NullHandle;
     if (pself->MGBI_bird1State != 0) active = 1;
 
     if (pself->MGBI_bird2State == 1) {
-        pself->MGBI_bird2Y += 12;
+        pself->MGBI_bird2Y += 18;
         if (pself->MGBI_bird2Y >= 148) {
             pself->MGBI_bird2Y = 148;
             pself->MGBI_bird2State = 2;
