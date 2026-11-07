@@ -19,7 +19,7 @@
 @classdecl MoorGEOSProcessClass, neverSaved;
 @classdecl MoorGEOSBoardClass;
 
-/* Allocated once on first shot and reused for subsequent clicks. */
+/* Sound handles are allocated lazily on first use and then reused. */
 MemHandle MoorGEOSGunshot = NullHandle;
 MemHandle MoorGEOSScream = NullHandle;
 
