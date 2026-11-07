@@ -1,6 +1,7 @@
 @class MoorGEOSBoardClass, VisContentClass;
     @message void MSG_MOORGEOS_NEW_GAME();
     @message void MSG_MOORGEOS_TIMER_TICK();
+    @message void MSG_MOORGEOS_FALL_TICK();
 
     @instance word MGBI_score = 0;
     @instance word MGBI_misses = 0;
@@ -14,11 +15,20 @@
     @instance word MGBI_bird0Y = 66;
     @instance word MGBI_bird1Y = 82;
     @instance word MGBI_bird2Y = 56;
+    /* 0=flying, 1=falling, 2=hidden during the respawn pause. */
+    @instance byte MGBI_bird0State = 0;
+    @instance byte MGBI_bird1State = 0;
+    @instance byte MGBI_bird2State = 0;
+    @instance byte MGBI_bird0Respawn = 0;
+    @instance byte MGBI_bird1Respawn = 0;
+    @instance byte MGBI_bird2Respawn = 0;
     @instance byte MGBI_bird0Down = 1;
     @instance byte MGBI_bird1Down = 0;
     @instance byte MGBI_bird2Down = 1;
     @instance word MGBI_timerID = 0;
     @instance word MGBI_timerHandle = 0;
+    @instance word MGBI_fallTimerID = 0;
+    @instance word MGBI_fallTimerHandle = 0;
     @instance byte MGBI_gameActive = 0;
     @instance byte MGBI_gameFinished = 0;
     @instance byte MGBI_lastShotState = 0;
