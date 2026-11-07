@@ -1,8 +1,9 @@
 /*
- * GeoMoorhuhn lite v0.5
+ * GeoMoorhuhn lite v0.6
  * Native GOC game for PC/GEOS 2.x and higher,
  * including FreeGEOS.
- * v0.4 baseline tested 3 November 2026; v0.5 gunshot sound tested in emulator.
+ * v0.5 gunshot sound tested in emulator. v0.6 adds a hit/fall/respawn
+ * sequence and a synthesized voice-like hit cry; this addition awaits testing.
  */
 
 @include <stdapp.goh>
@@ -20,6 +21,7 @@
 
 /* Allocated once on first shot and reused for subsequent clicks. */
 MemHandle MoorGEOSGunshot = NullHandle;
+MemHandle MoorGEOSScream = NullHandle;
 
 @start AppResource;
 
@@ -97,7 +99,7 @@ MemHandle MoorGEOSGunshot = NullHandle;
     GI_visMoniker = "GeoMoorhuhn lite";
 }
 @object GenGlyphClass MoorGEOSAboutLine2 = {
-    GI_visMoniker = "Version 0.5";
+    GI_visMoniker = "Version 0.6";
 }
 @object GenGlyphClass MoorGEOSAboutLogoGlyph = {
     GI_visMoniker = list { @MoorGEOSAboutLogo };
@@ -362,6 +364,7 @@ MemHandle MoorGEOSGunshot = NullHandle;
 {
     word birdX;
     word birdY;
+    byte birdState;
     byte birdIndex;
     void *birdGraphicData;
     Handle birdGString;
@@ -424,15 +427,24 @@ MemHandle MoorGEOSGunshot = NullHandle;
     /* Load, draw, and release a fresh GString for each chicken. */
     for (birdIndex = 0; birdIndex < 3; birdIndex++) {
         switch (birdIndex) {
-            case 0: birdX = pself->MGBI_bird0X; birdY = pself->MGBI_bird0Y; break;
-            case 1: birdX = pself->MGBI_bird1X; birdY = pself->MGBI_bird1Y; break;
-            default: birdX = pself->MGBI_bird2X; birdY = pself->MGBI_bird2Y; break;
+            case 0:
+                birdX = pself->MGBI_bird0X; birdY = pself->MGBI_bird0Y;
+                birdState = pself->MGBI_bird0State; break;
+            case 1:
+                birdX = pself->MGBI_bird1X; birdY = pself->MGBI_bird1Y;
+                birdState = pself->MGBI_bird1State; break;
+            default:
+                birdX = pself->MGBI_bird2X; birdY = pself->MGBI_bird2Y;
+                birdState = pself->MGBI_bird2State; break;
         }
-        birdGraphicData = LMemDerefHandles(OptrToHandle(oself), @MoorGEOSBirdGraphic);
-        birdGString = GrLoadGString(PtrToSegment(birdGraphicData), GST_PTR,
-                                      PtrToOffset(birdGraphicData));
-        GrDrawGString(gstate, birdGString, birdX, birdY, 0, (word*)0);
-        GrDestroyGString(birdGString, 0, GSKT_LEAVE_DATA);
+        /* State 2 is the short pause after the bird has reached the ground. */
+        if (birdState != 2) {
+            birdGraphicData = LMemDerefHandles(OptrToHandle(oself), @MoorGEOSBirdGraphic);
+            birdGString = GrLoadGString(PtrToSegment(birdGraphicData), GST_PTR,
+                                          PtrToOffset(birdGraphicData));
+            GrDrawGString(gstate, birdGString, birdX, birdY, 0, (word*)0);
+            GrDestroyGString(birdGString, 0, GSKT_LEAVE_DATA);
+        }
     }
 
     /* Context message: show the player how to start or restart. */
@@ -512,6 +524,7 @@ MemHandle MoorGEOSGunshot = NullHandle;
 @method MoorGEOSBoardClass, MSG_META_START_SELECT
 {
     byte hitTarget = 0;
+    byte hitBird = 255;
 
     /* Prepare the GEOS gunshot instrument once, then reuse its sound handle. */
     if (MoorGEOSGunshot == NullHandle) {
@@ -549,20 +562,61 @@ MemHandle MoorGEOSGunshot = NullHandle;
             &pself->MGBI_timerID);
     }
 
-    /* Check the current 52x70 rectangle of each moving sprite. */
-    if (((xPosition >= pself->MGBI_bird0X) &&
-         (xPosition <= pself->MGBI_bird0X + 51) &&
-         (yPosition >= pself->MGBI_bird0Y) &&
-         (yPosition <= pself->MGBI_bird0Y + 69)) ||
-        ((xPosition >= pself->MGBI_bird1X) &&
-         (xPosition <= pself->MGBI_bird1X + 51) &&
-         (yPosition >= pself->MGBI_bird1Y) &&
-         (yPosition <= pself->MGBI_bird1Y + 69)) ||
-        ((xPosition >= pself->MGBI_bird2X) &&
-         (xPosition <= pself->MGBI_bird2X + 51) &&
-         (yPosition >= pself->MGBI_bird2Y) &&
-         (yPosition <= pself->MGBI_bird2Y + 69))) {
+    /* A falling or hidden bird cannot be hit again. Remember exactly which
+     * live sprite was hit so only that bird starts the fall sequence. */
+    if ((pself->MGBI_bird0State == 0) &&
+        (xPosition >= pself->MGBI_bird0X) &&
+        (xPosition <= pself->MGBI_bird0X + 51) &&
+        (yPosition >= pself->MGBI_bird0Y) &&
+        (yPosition <= pself->MGBI_bird0Y + 69)) {
+        hitBird = 0;
+    } else if ((pself->MGBI_bird1State == 0) &&
+        (xPosition >= pself->MGBI_bird1X) &&
+        (xPosition <= pself->MGBI_bird1X + 51) &&
+        (yPosition >= pself->MGBI_bird1Y) &&
+        (yPosition <= pself->MGBI_bird1Y + 69)) {
+        hitBird = 1;
+    } else if ((pself->MGBI_bird2State == 0) &&
+        (xPosition >= pself->MGBI_bird2X) &&
+        (xPosition <= pself->MGBI_bird2X + 51) &&
+        (yPosition >= pself->MGBI_bird2Y) &&
+        (yPosition <= pself->MGBI_bird2Y + 69)) {
+        hitBird = 2;
+    }
+    if (hitBird != 255) {
         hitTarget = 1;
+        switch (hitBird) {
+            case 0:
+                pself->MGBI_bird0State = 1;
+                pself->MGBI_bird0Respawn = 0;
+                break;
+            case 1:
+                pself->MGBI_bird1State = 1;
+                pself->MGBI_bird1Respawn = 0;
+                break;
+            default:
+                pself->MGBI_bird2State = 1;
+                pself->MGBI_bird2Respawn = 0;
+                break;
+        }
+        /* The GM Voice Oohs patch supplies a short synthesized, voice-like cry.
+         * It is intentionally separate from the recorded-sample sound path. */
+        if (MoorGEOSScream == NullHandle) {
+            SoundAllocMusicNote(IP_VOICE_OOHS, 0, HIGH_A,
+                                DYNAMIC_FFF, SSDTT_TEMPO, QUARTER,
+                                &MoorGEOSScream);
+        }
+        if (MoorGEOSScream != NullHandle) {
+            UserStandardSound(SST_CUSTOM_SOUND, MoorGEOSScream, 1);
+        }
+        /* Animate the fall at six frames per second; the game clock remains
+         * on its independent one-second timer. */
+        if (pself->MGBI_fallTimerHandle == 0) {
+            pself->MGBI_fallTimerHandle = TimerStart(
+                TIMER_EVENT_CONTINUAL, oself, 10,
+                MSG_MOORGEOS_FALL_TICK, 10,
+                &pself->MGBI_fallTimerID);
+        }
     }
 
     if (hitTarget) {
@@ -583,10 +637,105 @@ MemHandle MoorGEOSGunshot = NullHandle;
     retVal->flags = MRF_PROCESSED;
 }
 
+/* Animate only birds that have been hit. The falling sprite descends into
+ * the grass, remains hidden briefly, then returns at a fresh flight position. */
+@method MoorGEOSBoardClass, MSG_MOORGEOS_FALL_TICK
+{
+    byte active = 0;
+
+    if (!pself->MGBI_gameActive) {
+        if (pself->MGBI_fallTimerHandle) {
+            TimerStop(pself->MGBI_fallTimerHandle, pself->MGBI_fallTimerID);
+            pself->MGBI_fallTimerHandle = 0;
+            pself->MGBI_fallTimerID = 0;
+        }
+        retVal->flags = MRF_PROCESSED;
+        return;
+    }
+
+    if (pself->MGBI_bird0State == 1) {
+        pself->MGBI_bird0Y += 12;
+        if (pself->MGBI_bird0Y >= 148) {
+            pself->MGBI_bird0Y = 148;
+            pself->MGBI_bird0State = 2;
+            pself->MGBI_bird0Respawn = 0;
+        }
+    } else if (pself->MGBI_bird0State == 2) {
+        if (++pself->MGBI_bird0Respawn >= 5) {
+            if (pself->MGBI_bird0Right) {
+                pself->MGBI_bird0X = 330; pself->MGBI_bird0Y = 42;
+                pself->MGBI_bird0Right = 0;
+            } else {
+                pself->MGBI_bird0X = 18; pself->MGBI_bird0Y = 82;
+                pself->MGBI_bird0Right = 1;
+            }
+            pself->MGBI_bird0Down = 1;
+            pself->MGBI_bird0State = 0;
+            pself->MGBI_bird0Respawn = 0;
+        }
+    }
+    if (pself->MGBI_bird0State != 0) active = 1;
+
+    if (pself->MGBI_bird1State == 1) {
+        pself->MGBI_bird1Y += 12;
+        if (pself->MGBI_bird1Y >= 148) {
+            pself->MGBI_bird1Y = 148;
+            pself->MGBI_bird1State = 2;
+            pself->MGBI_bird1Respawn = 0;
+        }
+    } else if (pself->MGBI_bird1State == 2) {
+        if (++pself->MGBI_bird1Respawn >= 5) {
+            if (pself->MGBI_bird1Right) {
+                pself->MGBI_bird1X = 22; pself->MGBI_bird1Y = 54;
+                pself->MGBI_bird1Right = 0;
+            } else {
+                pself->MGBI_bird1X = 326; pself->MGBI_bird1Y = 94;
+                pself->MGBI_bird1Right = 1;
+            }
+            pself->MGBI_bird1Down = 1;
+            pself->MGBI_bird1State = 0;
+            pself->MGBI_bird1Respawn = 0;
+        }
+    }
+    if (pself->MGBI_bird1State != 0) active = 1;
+
+    if (pself->MGBI_bird2State == 1) {
+        pself->MGBI_bird2Y += 12;
+        if (pself->MGBI_bird2Y >= 148) {
+            pself->MGBI_bird2Y = 148;
+            pself->MGBI_bird2State = 2;
+            pself->MGBI_bird2Respawn = 0;
+        }
+    } else if (pself->MGBI_bird2State == 2) {
+        if (++pself->MGBI_bird2Respawn >= 5) {
+            if (pself->MGBI_bird2Right) {
+                pself->MGBI_bird2X = 310; pself->MGBI_bird2Y = 36;
+                pself->MGBI_bird2Right = 0;
+            } else {
+                pself->MGBI_bird2X = 34; pself->MGBI_bird2Y = 98;
+                pself->MGBI_bird2Right = 1;
+            }
+            pself->MGBI_bird2Down = 1;
+            pself->MGBI_bird2State = 0;
+            pself->MGBI_bird2Respawn = 0;
+        }
+    }
+    if (pself->MGBI_bird2State != 0) active = 1;
+
+    if (!active && pself->MGBI_fallTimerHandle) {
+        TimerStop(pself->MGBI_fallTimerHandle, pself->MGBI_fallTimerID);
+        pself->MGBI_fallTimerHandle = 0;
+        pself->MGBI_fallTimerID = 0;
+    }
+    @send self::MSG_VIS_INVALIDATE();
+    retVal->flags = MRF_PROCESSED;
+}
+
 /* Move each chicken across the field once per second, then update the clock. */
 @method MoorGEOSBoardClass, MSG_MOORGEOS_TIMER_TICK
 {
     if (pself->MGBI_gameActive && pself->MGBI_secondsLeft > 0) {
+        if (pself->MGBI_bird0State == 0) {
         if (pself->MGBI_bird0Right) {
             if (pself->MGBI_bird0X >= 312) {
                 pself->MGBI_bird0X = 348;
@@ -613,7 +762,9 @@ MemHandle MoorGEOSGunshot = NullHandle;
         } else {
             pself->MGBI_bird0Y -= 14;
         }
+        }
 
+        if (pself->MGBI_bird1State == 0) {
         if (pself->MGBI_bird1Right) {
             if (pself->MGBI_bird1X >= 318) {
                 pself->MGBI_bird1X = 348;
@@ -640,7 +791,9 @@ MemHandle MoorGEOSGunshot = NullHandle;
         } else {
             pself->MGBI_bird1Y -= 16;
         }
+        }
 
+        if (pself->MGBI_bird2State == 0) {
         if (pself->MGBI_bird2Right) {
             if (pself->MGBI_bird2X >= 306) {
                 pself->MGBI_bird2X = 348;
@@ -667,6 +820,7 @@ MemHandle MoorGEOSGunshot = NullHandle;
         } else {
             pself->MGBI_bird2Y -= 12;
         }
+        }
         pself->MGBI_secondsLeft--;
         if (pself->MGBI_secondsLeft == 0) {
             pself->MGBI_gameActive = 0;
@@ -678,6 +832,11 @@ MemHandle MoorGEOSGunshot = NullHandle;
             TimerStop(pself->MGBI_timerHandle, pself->MGBI_timerID);
             pself->MGBI_timerHandle = 0;
             pself->MGBI_timerID = 0;
+            if (pself->MGBI_fallTimerHandle) {
+                TimerStop(pself->MGBI_fallTimerHandle, pself->MGBI_fallTimerID);
+                pself->MGBI_fallTimerHandle = 0;
+                pself->MGBI_fallTimerID = 0;
+            }
         }
         @send self::MSG_VIS_INVALIDATE();
     }
@@ -701,6 +860,12 @@ MemHandle MoorGEOSGunshot = NullHandle;
     pself->MGBI_bird0Down = 1;
     pself->MGBI_bird1Down = 0;
     pself->MGBI_bird2Down = 1;
+    pself->MGBI_bird0State = 0;
+    pself->MGBI_bird1State = 0;
+    pself->MGBI_bird2State = 0;
+    pself->MGBI_bird0Respawn = 0;
+    pself->MGBI_bird1Respawn = 0;
+    pself->MGBI_bird2Respawn = 0;
     pself->MGBI_gameActive = 0;
     pself->MGBI_gameFinished = 0;
     pself->MGBI_lastShotState = 0;
@@ -712,6 +877,11 @@ MemHandle MoorGEOSGunshot = NullHandle;
         TimerStop(pself->MGBI_timerHandle, pself->MGBI_timerID);
         pself->MGBI_timerHandle = 0;
         pself->MGBI_timerID = 0;
+    }
+    if (pself->MGBI_fallTimerHandle) {
+        TimerStop(pself->MGBI_fallTimerHandle, pself->MGBI_fallTimerID);
+        pself->MGBI_fallTimerHandle = 0;
+        pself->MGBI_fallTimerID = 0;
     }
 
     @send self::MSG_VIS_INVALIDATE();
