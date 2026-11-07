@@ -27,7 +27,7 @@ Beim Treffer:
 
 1. Die Trefferprüfung merkt sich die Nummer des tatsächlich getroffenen Huhns.
 2. Nur dieses Huhn wechselt in den Fallzustand; die anderen fliegen weiter.
-3. Ein kurzer synthetischer Stimmeffekt wird mit `IP_CHOIR_AAHS` angefordert. Es handelt sich um einen General-MIDI-Instrumentklang, nicht um eine echte Sprachaufnahme.
+3. Zwei Animationstakte nach dem Schuss ertönt ein kurzer synthetischer Stimmeffekt über `IP_CHOIR_AAHS`. Die Verzögerung soll verhindern, dass der Schrei das Schussgeräusch überdeckt; es handelt sich nicht um eine Sprachaufnahme.
 4. Ein separater schneller Timer bewegt das Huhn nach unten. Die reguläre Spieluhr läuft unabhängig davon weiter.
 5. Nach dem Erreichen der Wiese wird das Huhn für fünf Animationstakte ausgeblendet.
 6. Danach erscheint es an einer anderen Startposition und mit geänderter Flugrichtung wieder.
