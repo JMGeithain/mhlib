@@ -32,7 +32,7 @@ Eigenständiges natives GOC-Spielprojekt für **PC/GEOS 2.x und höher bis FreeG
 - Beim Treffer wird genau das getroffene, gerade fliegende Huhn in den Zustand „fallend“ versetzt. Fallende und kurzzeitig ausgeblendete Hühner können nicht erneut getroffen werden.
 - Ein eigener schneller GEOS-Timer bewegt das Huhn sichtbar nach unten bis in den Wiesenbereich. Die unabhängige 60-Sekunden-Spieluhr bleibt davon unberührt.
 - Nach dem Aufkommen verschwindet das Huhn kurz und erscheint anschließend an einer anderen Startposition mit geänderter Flugrichtung wieder.
-- Beim Treffer wird zusätzlich zum Schussgeräusch ein kurzer synthetischer Stimmeffekt über das General-MIDI-Instrument `IP_VOICE_OOHS` angefordert. Das ist ein instrumentell erzeugter Stimmeffekt, keine Sprachaufnahme.
+- Beim Treffer wird zusätzlich zum Schussgeräusch ein kurzer synthetischer Stimmeffekt über das General-MIDI-Instrument `IP_CHOIR_AAHS` angefordert. Das ist ein instrumentell erzeugter Stimmeffekt, keine Sprachaufnahme.
 - Die Zustände und der zusätzliche Animationstimer werden bei „Neues Spiel“ zurückgesetzt und bei Spielende gestoppt.
 - **Noch offen:** Version 0.6 muss mit der lokalen FreeGEOS-Toolchain kompiliert und im Emulator auf Timerverhalten, Soundwiedergabe, Treffer während paralleler Animationen und Neustart geprüft werden.
 
