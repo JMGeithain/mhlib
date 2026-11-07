@@ -2,7 +2,7 @@
 
 Eigenständiges natives GOC-Spielprojekt für **PC/GEOS 2.x und höher bis FreeGEOS**.
 
-**Zuletzt vom Anwender im Emulator bestätigt:** Version 0.6 mit Schuss, Trefferreaktion, Stimmeffekt, fallendem Huhn und Respawn funktioniert bereits recht gut. Version 0.7 ergänzt ein schnelleres Fallen und ein deutliches Treffer-Symbol; diese beiden Änderungen sind im Quellcode umgesetzt und warten auf den nächsten Build-/Emulatortest.
+**Zuletzt vom Anwender im Emulator bestätigt:** Version 0.7 wurde erfolgreich gebaut und getestet. Das schnellere Fallen (18 statt 12 Pixel pro Animationstakt) und das kräftige schwarze X als Trefferzeichen funktionieren im Emulator. Die Treffer-/Fall-/Respawn-Funktion aus v0.6 war bereits zuvor im Emulator geprüft.
 
 > Dieses Projekt ist nicht für GeoWorks 1.x / PC/GEOS 1.x bestimmt.
 
