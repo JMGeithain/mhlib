@@ -15,7 +15,9 @@
 - Schussgeräusch über das GEOS-Instrument `IP_GUNSHOT`.
 - Die GEOS-Sound-Bibliothek ist über `library sound` in der Geode-Definition eingebunden.
 
-## Version 0.6 – Trefferreaktion
+## Version 0.6 – im Emulator funktionsfähig
+
+Der Anwender bestätigt, dass die Treffer-/Fall-/Respawn-Reaktion in v0.6 bereits recht gut funktioniert. Die folgenden Änderungen sind die Weiterentwicklung v0.7.
 
 Jedes der drei Hühner besitzt einen eigenen Zustand:
 
@@ -28,7 +30,7 @@ Beim Treffer:
 1. Die Trefferprüfung merkt sich die Nummer des tatsächlich getroffenen Huhns.
 2. Nur dieses Huhn wechselt in den Fallzustand; die anderen fliegen weiter.
 3. Zwei Animationstakte nach dem Schuss ertönt ein kurzer synthetischer Stimmeffekt über `IP_CHOIR_AAHS`. Die Verzögerung soll verhindern, dass der Schrei das Schussgeräusch überdeckt; es handelt sich nicht um eine Sprachaufnahme.
-4. Ein separater schneller Timer bewegt das Huhn nach unten. Die reguläre Spieluhr läuft unabhängig davon weiter.
+4. Ein separater schneller Timer bewegt das Huhn nach unten. In v0.7 beträgt der Fallweg 18 statt 12 Pixel pro Animationstakt (50 % mehr); die reguläre Spieluhr läuft unabhängig davon weiter.
 5. Nach dem Erreichen der Wiese wird das Huhn für fünf Animationstakte ausgeblendet.
 6. Danach erscheint es an einer anderen Startposition und mit geänderter Flugrichtung wieder.
 
@@ -36,13 +38,15 @@ Fallende oder ausgeblendete Hühner sind nicht erneut treffbar. Der Animationsti
 
 ## Teststatus und offene Prüfungen
 
-**Noch nicht bestätigt für v0.6:** Der erste Buildversuch schlug mit zwei GOC-Fehlern im `MSG_MOORGEOS_FALL_TICK` fehl (`retVal` nicht deklariert). Ursache: Ein eigener Timer-Handler hat keinen `MouseReturnParams`-Rückgabewert. Die beiden `retVal->flags`-Zuweisungen wurden entfernt und die Korrektur auf GitHub committed. Ein erneuter Build des korrigierten Stands steht noch aus; ein Emulatorlauf liegt ebenfalls noch nicht vor.
+**v0.6:** Der Anwender bestätigt, dass die Trefferreaktion im Emulator bereits recht gut funktioniert. Die zunächst aufgetretenen GOC-Fehler im Timer-Handler wurden korrigiert.
+
+**v0.7 – Build-/Emulatortest offen:** Die Fallgeschwindigkeit wurde von 12 auf 18 Pixel pro Animationstakt erhöht. Während Zustand `1` (fallend) wird nun zusätzlich ein kontrastreiches rotes X über dem Huhn gezeichnet; das fliegende Sprite bleibt unverändert. Diese Änderungen müssen noch gebaut und im Emulator visuell geprüft werden.
 
 Beim nächsten Build-/Emulatortest gezielt prüfen:
 
 1. Erneute Kompilierung und Linken des korrigierten Stands mit der vorhandenen `C:\\Geos\\pcgeos`-Toolchain.
 2. Ob `IP_CHOIR_AAHS` auf dem installierten Soundtreiber hörbar ist und nicht den Schuss-Sound unerwünscht abschneidet.
-3. Ob das getroffene Huhn sichtbar bis in die Wiese fällt.
+3. Ob das getroffene Huhn mit der erhöhten Geschwindigkeit sichtbar bis in die Wiese fällt und das rote Treffer-X gut erkennbar ist.
 4. Ob nach kurzer Pause genau dieses Huhn wieder erscheint.
 5. Ob die anderen Hühner währenddessen normal weiterfliegen und treffbar bleiben.
 6. Ob mehrere Treffer kurz hintereinander mehrere unabhängige Fall-/Respawn-Abläufe korrekt verarbeiten.
