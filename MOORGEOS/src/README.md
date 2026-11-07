@@ -40,7 +40,7 @@ Fallende oder ausgeblendete Hühner sind nicht erneut treffbar. Der Animationsti
 
 **v0.6:** Der Anwender bestätigt, dass die Trefferreaktion im Emulator bereits recht gut funktioniert. Die zunächst aufgetretenen GOC-Fehler im Timer-Handler wurden korrigiert.
 
-**v0.7 – Build-/Emulatortest offen:** Die Fallgeschwindigkeit wurde von 12 auf 18 Pixel pro Animationstakt erhöht. Während Zustand `1` (fallend) wird nun zusätzlich ein kontrastreiches rotes X über dem Huhn gezeichnet; das fliegende Sprite bleibt unverändert. Diese Änderungen müssen noch gebaut und im Emulator visuell geprüft werden.
+**v0.7 – Build-/Emulatortest offen:** Die Fallgeschwindigkeit wurde von 12 auf 18 Pixel pro Animationstakt erhöht. Während Zustand `1` (fallend) wird nun zusätzlich ein deutlich fetteres, vollständig schwarzes X über dem Huhn gezeichnet (fünf parallele Striche je Diagonale); das fliegende Sprite bleibt unverändert. Diese Änderungen müssen noch gebaut und im Emulator visuell geprüft werden.
 
 Beim nächsten Build-/Emulatortest gezielt prüfen:
 
